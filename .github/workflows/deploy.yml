@@ -1,0 +1,92 @@
+name: Check and deploy Lunar Curation
+
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: curation-lunar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.9.17"
+          enable-cache: true
+          cache-dependency-glob: python/uv.lock
+
+      - name: Run locked Python tests
+        run: uv run --project python --locked --extra test pytest python/tests -q
+
+  frontend:
+    name: Frontend checks and deployment
+    needs: python
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect the future frontend
+        id: frontend
+        shell: bash
+        run: |
+          if [[ -f package.json && -f package-lock.json ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "React frontend is not present yet; deployment is intentionally skipped."
+          fi
+
+      - name: Setup Node.js
+        if: steps.frontend.outputs.enabled == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.11.1
+          cache: npm
+
+      - name: Install frontend dependencies
+        if: steps.frontend.outputs.enabled == 'true'
+        run: npm ci
+
+      - name: Run frontend checks
+        if: steps.frontend.outputs.enabled == 'true'
+        run: npm run check
+
+      - name: Build frontend
+        if: steps.frontend.outputs.enabled == 'true'
+        run: npm run build
+
+      - name: Verify deployable static output
+        if: steps.frontend.outputs.enabled == 'true'
+        shell: bash
+        run: test -f .local/dist/index.html
+
+      - name: Deploy curation.apolloinrealtime.org
+        if: github.ref == 'refs/heads/main' && steps.frontend.outputs.enabled == 'true'
+        env:
+          DREAMHOST_PRIVATE_KEY: ${{ secrets.DREAMHOST_PRIVATE_KEY }}
+          DREAMHOST_HOST: ${{ vars.DREAMHOST_HOST }}
+          DREAMHOST_PATH_DEV: ${{ vars.DREAMHOST_PATH_DEV }}
+          DREAMHOST_USER: ${{ vars.DREAMHOST_USER }}
+        shell: bash
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DREAMHOST_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$DREAMHOST_HOST" >> ~/.ssh/known_hosts
+
+          ssh "$DREAMHOST_USER@$DREAMHOST_HOST" "mkdir -p '$DREAMHOST_PATH_DEV'"
+          rsync -avz --delete .local/dist/ "$DREAMHOST_USER@$DREAMHOST_HOST:$DREAMHOST_PATH_DEV/"

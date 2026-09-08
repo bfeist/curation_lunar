@@ -6,5 +6,8 @@ Reverse engineering the content of NASA's current public Lunar Curation website 
 - [Python extractor and uv commands](python/README.md)
 - [Pilot results](docs/pilot-results.md)
 - [Schema evolution and original-source audit](docs/schema-evolution.md)
+- [Hosting and deployment](docs/hosting.md)
 
 All Python work uses `uv`. The acquired schema models the public website and can evolve as original code/database information becomes available. API/search discrepancies are retained for a separate audit and treated as legacy search bugs rather than reproduced as hidden restrictions.
+
+The future React site will publish from `main` to [curation.apolloinrealtime.org](https://curation.apolloinrealtime.org). Deployment is already wired but remains inactive until the root frontend project and its static build exist.
