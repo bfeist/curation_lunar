@@ -1,0 +1,722 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<!-- Link to Privacy Policy -->
+<link rel="P3Pv1" href="/w3c/p3p.xml">
+<title>Apollo Sample Description</title>
+    <link rel="shortcut icon" type="image/x-icon"
+          href="https://curator.jsc.nasa.gov/favicon.ico" />
+
+    <link rel="home" href="https://curator.jsc.nasa.gov"
+          title="Front page" />
+
+    <link rel="contents" href="https://curator.jsc.nasa.gov/sitemap.cfm"
+          title="Site Map" />
+
+   <!-- <link rel="search"
+          href="https://ares-search.jsc.nasa.gov"
+          title="Search this site" />-->     <link rel="shortcut icon" type="image/x-icon"
+          href="https://curator.jsc.nasa.gov/favicon.ico" />
+
+    <link rel="home" href="https://curator.jsc.nasa.gov"
+          title="Front page" />
+
+    <link rel="contents" href="https://curator.jsc.nasa.gov/sitemap.cfm"
+          title="Site Map" />
+
+   <!-- <link rel="search"
+          href="https://ares-search.jsc.nasa.gov"
+          title="Search this site" />-->
+<meta name="description" content="Main page of the Antarctic Meteorite Collection at NASA Astromaterials Curation. The curation and collection of Antarctic meteorites is a U.S. funded, cooperative effort among NASA, the National Science Foundation (NSF) and the Smithsonian Institution."  />
+<meta name="keywords" content="Curation, Astromaterials Curation, Antarctic Meteorites, Meteorites,  Mars Meteorites, Lunar Meteorites, Astromaterials, Extraterrestrial Samples, Moon, Sun, Comets, Asteroids, space, space education" />
+<meta name="author" content="Nancy S. Todd" />
+<meta charset="utf-8">
+<!-- Stylesheets -->
+<link href="https://curator.jsc.nasa.gov/_css/reset.css" rel="stylesheet" type="text/css" media="all">
+<link href="https://curator.jsc.nasa.gov/_css/jquery-ui.css" rel="stylesheet" type="text/css" media="all">
+<!-- Common Javascript files --> 
+<script src="../../_js/newwindowlinks.js" type="text/javascript"></script> 
+<script src="/_utilities/jquery/jquery-3.6.0/jquery-3.6.0.min.js"></script> 
+<script src="/_utilities/jquery-ui/jquery-ui-1.13.0/jquery-ui.min.js" type="text/javascript"></script> 
+
+<!-- jPList Core --> 
+<script src="../../_js/jplist.core.min.js"></script>
+<link href="https://curator.jsc.nasa.gov/_css/jplist.core.min.css" rel="stylesheet" type="text/css" />
+<!-- jPList Pagination Bundle --> 
+<script src="../../_js/jplist.pagination-bundle.min.js"></script>
+<link href="https://curator.jsc.nasa.gov/_css/jplist.pagination-bundle.min.css" rel="stylesheet" type="text/css" />
+<!-- jPList History Bundle --> 
+<script src="../../_js/jplist.history-bundle.min.js"></script>
+<link href="https://curator.jsc.nasa.gov/_css/jplist.history-bundle.min.css" rel="stylesheet" type="text/css" />
+ 
+<!-- jPList Sort Bundle --> 
+<script src="../../_js/jplist.sort-bundle.min.js"></script> 
+<script src="../../_js/jplist.sort-buttons.min.js"></script> 
+<!-- jPList List Grid View Bundle --> 
+<script src="../../_js/jplist.list-grid-view.min.js"></script>
+<link href="https://curator.jsc.nasa.gov/_css/jplist.list-grid-view.min.css" rel="stylesheet" type="text/css" />
+<!-- jPList textbox filter Bundle --> 
+<script src="../../_js/jplist.textbox-filter.min.js"></script>
+<link href="https://curator.jsc.nasa.gov/_css/jplist.textbox-filter.min.css" rel="stylesheet" type="text/css" />
+<!-- jPList preloader Bundle --> 
+<script src="../../_js/jplist.preloader-control.min.js"></script>
+<link href="https://curator.jsc.nasa.gov/_css/jplist.preloader-control.min.css" rel="stylesheet" type="text/css" />
+	
+	
+
+<link href="https://curator.jsc.nasa.gov/_css/portal-style.css" rel="stylesheet" type="text/css" media="all">
+<link href="https://curator.jsc.nasa.gov/_css/portal-images.css" rel="stylesheet" type="text/css" media="all">
+<link href="https://curator.jsc.nasa.gov/_css/menustyles.css" rel="stylesheet" type="text/css" media="screen">
+<link href="/lunar/samplecatalog/_css/lunarcatalog.css" rel="stylesheet" type="text/css" />
+<script>
+	jQuery(document).ready(function($){
+			$("#dialog").dialog({
+				autoOpen: false,
+				width: 600
+			});
+            
+			$(".jqdialog").on("click", function(e) {
+				e.preventDefault();
+				$("#dialog").html("");
+				$("#dialog").dialog("option", "title", "Loading...").dialog("open");
+				$("#dialog").load(this.href, function() {
+					$(this).dialog("option", "title", $(this).find("h1").text());
+					$(this).find("h1").remove();
+				});
+			});
+           
+	});
+</script> 
+<script>
+	$('document').ready(function(){
+
+           //check all jPList javascript options here
+           $('#reflist').jplist({				
+              itemsBox: '.list' 
+			  ,itemPath: '.list-item' 
+			  ,panelPath: '.jplist-panel'	
+              ,noResults: '.jplist-no-results'
+              ,iosBtnPath: '.jplist-ios-button'
+           });
+    		$('#gallery').jplist({				
+              itemsBox: '.list' 
+			  ,itemPath: '.list-item' 
+			  ,panelPath: '.jplist-panel'	
+              ,noResults: '.jplist-no-results'
+              ,iosBtnPath: '.jplist-ios-button'
+              //save plugin state
+				, storage: 'localstorage' //'', 'cookies', 'localstorage'			
+				, storageName: 'views'
+                 //this code occurs on every jplist action
+				, redrawCallback: function (collection, $dataview, statuses) {
+
+					//init lazy load on a filtered set of elements
+					//$('.list-item img').lazyload();
+				}
+
+
+           });
+	});
+</script><!--[if IE 7]>
+    <link href="/_css/IEFixes.css" rel="stylesheet" type="text/css" media="all" />
+    <![endif]--> 
+<!--[if lt IE 7]>
+<script src="https://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+<![endif]-->
+</head>
+<body id="section-lunar" dir="ltr">
+<div class="lunar" id="portal-wrapper">
+  <div id="portal-top">
+    <div id="portal-header">
+      <h1 class="hiddenStructure">Apollo Sample Description</h1>
+      <div class="visualClear"></div>
+      <p class="hiddenStructure"> <a accesskey="2"
+       href="#documentContent">Skip to content</a> | <a accesskey="6"
+       href="#secondaryNavigation">Skip to navigation</a></p>
+<h2 class="hiddenStructure">Site Actions</h2>
+<div class="visualClear"></div>
+<ul id="portal-siteactions">
+  <li id="siteaction-sitemap"><a href="/sitemap.cfm" accesskey="3" title="Site Map">Site Map</a></li>
+  <li id="siteaction-accessibility"><a href="/accessibility-info" accesskey="0" title="Accessibility">Accessibility</a></li>
+  <li id="siteaction-contact"><a href="/personnel.cfm" accesskey="7" title="Contact">Contact NASA Curation</a></li>
+    <li id="siteaction-privacy-policy"><a href="/accessibility-info/" accesskey="9" title="Privacy Statement">Privacy Policy Statement</a></li>
+</ul>
+      <div id="portal-searchbox">
+        <script>
+  (function() {
+    var cx = '011634150496141856610:8mpaoztamoe';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<div class="gcse-search"></div>
+
+      </div>
+      <a id="portal-logo" accesskey="1" href="https://www.nasa.gov"><img src="../../_images/nasa_logo.gif" alt="Go to NASA Portal" title="National Aeronautics and Space Administration" height="64" width="255"></a>
+      <div id="headbox"> </div>
+      <h2 class="hiddenStructure">Site Sections</h2>
+      <div id="portal-globalnav">
+        
+	<ul id="portaltab">
+		<li id="portaltab-collections" class="home">
+			<a href="/" title="Sample Collections">Sample Collections</a></li>
+		<li id="portaltab-deadlines" class="deadlines">
+			<a href="/bboard.cfm" title="Sample Request Dealines">Sample Request Deadlines</a></li>
+		<li id="portaltab-news" class="news">
+			<a href="/news.cfm" title="Curation News">Curation News</a></li>
+		<li id="portaltab-newsletter" class="newsletter">
+			<a href="/newsletter" title="Astromaterials Newsletter">Astromaterials Newsletter</a></li>
+		<li id="portaltab-education" class="education">
+			<a href="/Education/index.cfm" title="Education Samples">Education Samples</a></li>
+		<li id="portaltab-ares" class="ares">
+			<a href="https://ares.jsc.nasa.gov" title="ARES Website">NASA/ARES</a></li>
+		<li id="portaltab-end"></li>
+	</ul>
+
+        <div id="bannerBox">
+          <div id="hometitle">
+            <h2><span class="static_banner"><a href="../../index.cfm">Current Site Section</a> </span> </h2>
+          </div>
+        </div>
+        <a name="secondaryNavigation"></a><div id="navAudience">
+ <ul style="font-size: .99em;"> 
+  <li id="portaltab-lunar" class="lunar"><a href="/lunar/index.cfm" title="Apollo Lunar Rocks and Soils">Lunar</a></li>
+  <li id="portaltab-meteorite" class="meteorites"><a href="/antmet/index.cfm" title="Antarctic Meteorites">Meteorite</a></li>
+  <li id="portaltab-stardust" class="stardust"><a href="/stardust/index.cfm" title="Stardust Cometary and Interstellar Dust">Stardust</a></li>
+  <li id="portaltab-genesis" class="genesis"><a href="/genesis/index.cfm" title="Genesis Solar Wind">Genesis</a></li>
+  <li id="portaltab-cosmicdust" class="cosmicdust"><a href="/dust" title="Cosmic Dust">Cosmic Dust</a></li>
+  <li id="portaltab-seh" class="seh"><a href="/mic" title="Micropsarticle Impacts">Microparticle Impacts</a></li>
+  <li id="portaltab-hayabusa" class="hayabusa"><a href="/hayabusa" title="Hayabusa">Hayabusa</a></li>
+   <li id="portaltab-hayabusa2" class="hayabusa2"><a href="/hayabusa2" title="Hayabusa2">Hayabusa2</a></li>
+   <li id="portaltab-osirisrex" class="osirisrex"><a href="/osirisrex" title="OSIRIS-REx">OSIRIS-REx</a></li>
+ <li id="bottomtab-end"></li>
+    </ul>
+</div>
+
+      </div>
+    </div>
+  </div>
+  <div class="visualClear"></div>
+  <div id="portal-columns">
+    <h3 class="hiddenStructure">Breadcrumbs</h3>
+    <div id="portal-breadcrumbs">
+      <!-- InstanceBegin template="/Templates/Breadcrumbs.dwt.cfm" codeOutsideHTMLIsLocked="false" --><!-- InstanceParam name="ShowInternalBreadcrumbs" type="boolean" value="true" -->
+<div xmlns:v="http://rdf.data-vocabulary.org/#"> 
+ <span  typeof="v:Breadcrumb"><a href="http://curator.jsc.nasa.gov/" rel="v:url" property="v:title">Home</a> </span><span class="breadcrumbSeparator"> &rarr; </span><!-- InstanceBeginRepeat name="repeatBreadcrumb" --><!-- InstanceBeginRepeatEntry --><span  typeof="v:Breadcrumb"><!-- InstanceBeginEditable name="internalBreadcrumbItem" --><a href="/lunar/index.cfm" rel="v:url" property="v:title">Lunar Samples</a><!-- InstanceEndEditable --></span><span class="breadcrumbSeparator"> &rarr; </span><!-- InstanceEndRepeatEntry --><!-- InstanceEndRepeat -->Apollo Sample Description
+</div>
+
+<!-- InstanceEnd -->
+    </div>
+    <script type="text/javascript">
+ jQuery(document).ready(function($){
+	 $('li#portaltab-collections').addClass('selected');
+	$('li#portaltab-lunar').addClass('selected');
+	});
+</script>
+    <div id="portal-column-content"><a name="documentContent"></a>
+      <div id="main_content_wrapper"> 
+        <div class="catalogtitle">
+          <p>Lunar Sample and PhotoCatalog <img src="../../_images/icons/nasa_logo_icon.gif" alt="NASA Logo" width="25" height="20" align="texttop" /></p>
+        </div>
+        <div id="amnBody">
+          <h3>Apollo Sample 63586</h3>
+          <div id="amndesc">
+            <table width="90%" class="datatab">
+              
+                <thead>
+                  <tr>
+                    <th width="25%">&nbsp;</th>
+                    <th width="75%">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                
+                <tr>
+                  <td>Generic Number</td>
+                  <td>63586</td>
+                </tr>
+                <tr class="amnheader">
+                  <td colspan="2">Mission Information</td>
+                </tr>
+                <tr>
+                  <td>Mission</td>
+                  <td>Apollo 16</td>
+                </tr>
+                <tr>
+                  <td>Station</td>
+                  <td>13</td>
+                </tr>
+                <tr>
+                  <td>Landmark</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Bag Number</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Original Weight</td>
+                  <td>1.98 g</td>
+                </tr>
+                <tr class="amnheader">
+                  <td colspan="2">Sample Classification</td>
+                </tr>
+                <tr>
+                  <td>Rock Type</td>
+                  <td>Breccia</td>
+                </tr>
+                <tr>
+                  <td>Rock Subtype</td>
+                  <td>Impact Melt</td>
+                </tr>
+                <tr>
+                  <td>Description</td>
+                  <td>Fine-grained</td>
+                </tr>
+                <tr class="amnheader">
+                  <td colspan="2">Sample Availability</td>
+                </tr>
+                
+                <tr>
+                  <td>Percent of Pristine Sample Available</td>
+                  <td> 88.43% 
+                      
+                    </td>
+                </tr>
+                
+                <tr>
+                  <td>Date of Pristinity Calculation</td>
+                  <td>Aug 15, 2007</td>
+                </tr>
+                
+                <tr>
+                  <td>Thin Sections Available</td>
+                  <td>
+                      <a href="thinsections.cfm?sample=63586" title="View thin section list for generic 63586" class="jqdialog">See list of available thin sections.</a>
+                    
+                    <div id="dialog"></div></td>
+                </tr>
+                <tr class="amnheader">
+                  <td colspan="2">Public Displays</td>
+                </tr>
+                <tr>
+                  <td>Display Samples Available</td>
+                  <td>
+                    
+                    </td>
+                </tr>
+				
+						
+                <tr class="amnheader">
+                  <td colspan="2">Catalogs and Publications</td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                      <ul>
+                        
+                          <li><a href="http://curator.jsc.nasa.gov/lunar/lsc/63548.pdf" title="Lunar Sample Compendium">Lunar Sample Compendium</a></li>
+                        
+                          <li><a href="http://curator.jsc.nasa.gov/lunar/catalogs/other/A16_Rake_Sta_1_4_13.pdf" title="Apollo 16 Rake Samples from Stations 1, 4 and 13">Apollo 16 Rake Samples from Stations 1, 4 and 13</a></li>
+                        
+                          <li><a href="http://curator.jsc.nasa.gov/lunar/catalogs/apollo16/part2/63586.pdf" title="Catalog of Apollo 16 Rocks: Part 2. 63335-66095">Catalog of Apollo 16 Rocks: Part 2. 63335-66095</a></li>
+                        
+                      </ul>
+                    </td>
+                </tr>
+              
+                <tr class="amnheader">
+                  <td colspan="2">Images for Apollo Sample 63586</td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                      <div id="gallery" class="box jplist"> 
+                        
+                        <!-- ios button: show/hide panel -->
+                        <div class="jplist-ios-button"> <i class="fa fa-sort"></i> jPList Actions </div>
+                        
+                        <!-- panel -->
+                        <div class="jplist-panel box panel-top"> 
+                          
+                          <!-- reset button -->
+                          <button 
+			type="button" 
+			class="jplist-reset-btn"
+			data-control-type="reset" 
+			data-control-name="reset" 
+			data-control-action="reset"> Reset &nbsp;<i class="fa fa-share"></i> </button>
+                          <div 
+			class="jplist-drop-down" 
+			data-control-type="items-per-page-drop-down" 
+			data-control-name="paging" 
+			data-control-action="paging">
+                            <ul>
+                              <li><span data-number="5"> 5 per page </span></li>
+                              <li><span data-number="10" data-default="true"> 10 per page </span></li>
+                              <li><span data-number="15"> 15 per page </span></li>
+                              <li><span data-number="all"> View All </span></li>
+                            </ul>
+                          </div>
+                          
+                          <!-- pagination results -->
+                          <div 
+			class="jplist-label" 
+			data-type="Page {current} of {pages}" 
+			data-control-type="pagination-info" 
+			data-control-name="paging" 
+			data-control-action="paging"> </div>
+                          
+                          <!-- pagination -->
+                          <div 
+			class="jplist-pagination" 
+			data-control-type="pagination" 
+			data-control-name="paging" 
+			data-control-action="paging"
+            data-range="5"
+            data-mode="google-like"> </div>
+                          
+                          <!-- views -->
+                          
+                          <div 
+			class="jplist-views" 
+			data-control-type="views" 
+			data-control-name="views" 
+			data-control-action="views"
+			data-default="jplist-grid-view">
+                            <button type="button" class="jplist-view jplist-list-view" data-type="jplist-list-view"></button>
+                            <button type="button" class="jplist-view jplist-grid-view" data-type="jplist-grid-view"></button>
+                            <button type="button" class="jplist-view jplist-thumbs-view" data-type="jplist-thumbs-view"></button>
+                          </div>
+                          <div 
+			class="jplist-drop-down" 
+			data-control-type="sort-drop-down" 
+			data-control-name="sort" 
+			data-control-action="sort">
+                            <ul>
+                              <li><span data-path="default">Sort by</span></li>
+                              <li><span data-path=".title" data-order="asc" data-type="text">Photo Number asc</span></li>
+                              <li><span data-path=".title" data-order="desc" data-type="text">Photo Number desc</span></li>
+                              <li><span data-path=".desc" data-order="asc" data-type="text">Description A-Z</span></li>
+                              <li><span data-path=".desc" data-order="desc" data-type="text">Description Z-A</span></li>
+                            </ul>
+                          </div>
+                          
+                          <!-- filter by title -->
+                          <div class="text-filter-box"> <i class="fa fa-search  jplist-icon"></i> 
+                            
+                            <!--[if lt IE 10]>
+			<div class="jplist-label">Filter by Title:</div>
+			<![endif]-->
+                            
+                            <input 
+				data-path=".title" 
+				type="text" 
+				value="" 
+				placeholder="Filter by Photo Number" 
+				data-control-type="textbox" 
+				data-control-name="title-filter" 
+				data-control-action="filter"
+			/>
+                          </div>
+                          
+                          <!-- filter by description -->
+                          <div class="text-filter-box"> <i class="fa fa-search  jplist-icon"></i> 
+                            
+                            <!--[if lt IE 10]>
+			<div class="jplist-label">Filter by Description:</div>
+			<![endif]-->
+                            
+                            <input 
+				data-path=".desc" 
+				type="text" 
+				value="" 
+				placeholder="Filter by Description" 
+				data-control-type="textbox" 
+				data-control-name="desc-filter" 
+				data-control-action="filter"
+			/>
+                          </div>
+                        </div>
+                        <!-- data -->
+                        <div class="list box text-shadow"> 
+                          
+                          <!-- item 1 --> 
+                          
+                            <div class="list-item box"> 
+                              <!-- img -->
+                              <div class="img left">
+                                
+                                  <a href="photoinfo.cfm?photo=S72-42069" title="Color photograph of Apollo 16 Rake Sample(s) 63577:63578:63579:63585:63586:63587:63588:63589:63595; Processing photograph displaying a GROUP II with an orientation of S1."><img src="https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/webimage/S72-42069.jpg"  data-original="photos/webimage/S72-42069.jpg"  alt="Color photograph of Apollo 16 Rake Sample(s) 63577:63578:63579:63585:63586:63587:63588:63589:63595; Processing photograph displaying a GROUP II with an orientation of S1." loading="lazy" /></a>
+                                  
+                              </div>
+                              
+                              <!-- data -->
+                              <div class="block right">
+                                <p class="title">Photo Number: S72-42069</p>
+                                <p class="desc">Color photograph of Apollo 16 Rake Sample(s) 63577:63578:63579:63585:63586:63587:63588:63589:63595; Processing photograph displaying a GROUP II with an orientation of S1.</p>
+                              </div>
+                            </div>
+                          
+                            <div class="list-item box"> 
+                              <!-- img -->
+                              <div class="img left">
+                                
+                                  <a href="photoinfo.cfm?photo=S72-42070" title="Color photograph of Apollo 16 Rake Sample(s) 64825:64826:64827:64828:64829:64835:64836:64837; Processing photograph displaying G5 with an orientation of E."><img src="https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/webimage/S72-42070.jpg"  data-original="photos/webimage/S72-42070.jpg"  alt="Color photograph of Apollo 16 Rake Sample(s) 64825:64826:64827:64828:64829:64835:64836:64837; Processing photograph displaying G5 with an orientation of E." loading="lazy" /></a>
+                                  
+                              </div>
+                              
+                              <!-- data -->
+                              <div class="block right">
+                                <p class="title">Photo Number: S72-42070</p>
+                                <p class="desc">Color photograph of Apollo 16 Rake Sample(s) 64825:64826:64827:64828:64829:64835:64836:64837; Processing photograph displaying G5 with an orientation of E.</p>
+                              </div>
+                            </div>
+                          
+                            <div class="list-item box"> 
+                              <!-- img -->
+                              <div class="img left">
+                                
+                                  <a href="photoinfo.cfm?photo=S72-42071" title="Color photograph of Apollo 16 Rake Sample(s) 63577:63578:63579:63585:63586:63587:63588:63589:63595; Processing photograph displaying a GROUP II with an orientation of N1."><img src="https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/webimage/S72-42071.jpg"  data-original="photos/webimage/S72-42071.jpg"  alt="Color photograph of Apollo 16 Rake Sample(s) 63577:63578:63579:63585:63586:63587:63588:63589:63595; Processing photograph displaying a GROUP II with an orientation of N1." loading="lazy" /></a>
+                                  
+                              </div>
+                              
+                              <!-- data -->
+                              <div class="block right">
+                                <p class="title">Photo Number: S72-42071</p>
+                                <p class="desc">Color photograph of Apollo 16 Rake Sample(s) 63577:63578:63579:63585:63586:63587:63588:63589:63595; Processing photograph displaying a GROUP II with an orientation of N1.</p>
+                              </div>
+                            </div>
+                          
+                            <div class="list-item box"> 
+                              <!-- img -->
+                              <div class="img left">
+                                
+                                  <a href="photoinfo.cfm?photo=S72-42077" title="Color photograph of Apollo 16 Rake Sample(s) 64825:64826:64827:64828:64829:64835:64836:64837; Processing photograph displaying G5 with an orientation of W."><img src="https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/webimage/S72-42077.jpg"  data-original="photos/webimage/S72-42077.jpg"  alt="Color photograph of Apollo 16 Rake Sample(s) 64825:64826:64827:64828:64829:64835:64836:64837; Processing photograph displaying G5 with an orientation of W." loading="lazy" /></a>
+                                  
+                              </div>
+                              
+                              <!-- data -->
+                              <div class="block right">
+                                <p class="title">Photo Number: S72-42077</p>
+                                <p class="desc">Color photograph of Apollo 16 Rake Sample(s) 64825:64826:64827:64828:64829:64835:64836:64837; Processing photograph displaying G5 with an orientation of W.</p>
+                              </div>
+                            </div>
+                          
+                            <div class="list-item box"> 
+                              <!-- img -->
+                              <div class="img left">
+                                
+                                  <a href="photoinfo.cfm?photo=S72-42078" title="Color photograph of Apollo 16 Rake Sample(s) 63559:63565:63566:63567:63568:63569:63575:63576:63588:63589:63595:63598:63585:63586:63587:63597:63577:63578:63579:63596; Processing photograph displaying group inventory."><img src="https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/webimage/S72-42078.jpg"  data-original="photos/webimage/S72-42078.jpg"  alt="Color photograph of Apollo 16 Rake Sample(s) 63559:63565:63566:63567:63568:63569:63575:63576:63588:63589:63595:63598:63585:63586:63587:63597:63577:63578:63579:63596; Processing photograph displaying group inventory." loading="lazy" /></a>
+                                  
+                              </div>
+                              
+                              <!-- data -->
+                              <div class="block right">
+                                <p class="title">Photo Number: S72-42078</p>
+                                <p class="desc">Color photograph of Apollo 16 Rake Sample(s) 63559:63565:63566:63567:63568:63569:63575:63576:63588:63589:63595:63598:63585:63586:63587:63597:63577:63578:63579:63596; Processing photograph displaying group inventory.</p>
+                              </div>
+                            </div>
+                          
+                            <div class="list-item box"> 
+                              <!-- img -->
+                              <div class="img left">
+                                
+                                  <a href="photoinfo.cfm?photo=S72-42648" title="Color photograph of Apollo 16 Rake Sample(s) 60645:60646:60647:60648:60649:60655:60656:60657:60658:60659:60666:60667:60668:60669:60675:60676:60677:60678:60679:60665,0; Processing photograph displaying TRAY 2."><img src="https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/webimage/S72-42648.jpg"  data-original="photos/webimage/S72-42648.jpg"  alt="Color photograph of Apollo 16 Rake Sample(s) 60645:60646:60647:60648:60649:60655:60656:60657:60658:60659:60666:60667:60668:60669:60675:60676:60677:60678:60679:60665,0; Processing photograph displaying TRAY 2." loading="lazy" /></a>
+                                  
+                              </div>
+                              
+                              <!-- data -->
+                              <div class="block right">
+                                <p class="title">Photo Number: S72-42648</p>
+                                <p class="desc">Color photograph of Apollo 16 Rake Sample(s) 60645:60646:60647:60648:60649:60655:60656:60657:60658:60659:60666:60667:60668:60669:60675:60676:60677:60678:60679:60665,0; Processing photograph displaying TRAY 2.</p>
+                              </div>
+                            </div>
+                          
+                            <div class="list-item box"> 
+                              <!-- img -->
+                              <div class="img left">
+                                
+                                  <a href="photoinfo.cfm?photo=S80-37439" title="Color photograph of Apollo 16 Rake Sample(s) 63586,0; Processing photograph displaying inventory."><img src="https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/webimage/S80-37439.jpg"  data-original="photos/webimage/S80-37439.jpg"  alt="Color photograph of Apollo 16 Rake Sample(s) 63586,0; Processing photograph displaying inventory." loading="lazy" /></a>
+                                  
+                              </div>
+                              
+                              <!-- data -->
+                              <div class="block right">
+                                <p class="title">Photo Number: S80-37439</p>
+                                <p class="desc">Color photograph of Apollo 16 Rake Sample(s) 63586,0; Processing photograph displaying inventory.</p>
+                              </div>
+                            </div>
+                           </div>
+                        <div class="box jplist-no-results text-shadow align-center">
+                          <p>No results found</p>
+                        </div>
+                        
+                        <!-- ios button: show/hide panel -->
+                        <div class="jplist-ios-button"> <i class="fa fa-sort"></i> jPList Actions </div>
+                        
+                        <!-- panel -->
+                        <div class="jplist-panel box panel-bottom">
+                          <div 
+			class="jplist-drop-down" 
+			data-control-type="items-per-page-drop-down" 
+			data-control-name="paging" 
+			data-control-action="paging"
+			data-control-animate-to-top="true">
+                            <ul>
+                              <li><span data-number="5"> 5 per page </span></li>
+                              <li><span data-number="10" data-default="true"> 10 per page </span></li>
+                              <li><span data-number="15"> 15 per page </span></li>
+                              <li><span data-number="all"> View All </span></li>
+                            </ul>
+                          </div>
+                          <div 
+			class="jplist-drop-down" 
+			data-control-type="sort-drop-down" 
+			data-control-name="sort" 
+			data-control-action="sort"
+			data-control-animate-to-top="true">
+                            <ul>
+                              <li><span data-path="default">Sort by</span></li>
+                              <li><span data-path=".title" data-order="asc" data-type="text">Photo Number asc</span></li>
+                              <li><span data-path=".title" data-order="desc" data-type="text">Photo Number desc</span></li>
+                              <li><span data-path=".desc" data-order="asc" data-type="text">Description A-Z</span></li>
+                              <li><span data-path=".desc" data-order="desc" data-type="text">Description Z-A</span></li>
+                            </ul>
+                          </div>
+                          
+                          <!-- pagination results -->
+                          <div 
+			class="jplist-label" 
+			data-type="{start} - {end} of {all}"
+			data-control-type="pagination-info" 
+			data-control-name="paging" 
+			data-control-action="paging"> </div>
+                          
+                          <!-- pagination -->
+                          <div 
+			class="jplist-pagination" 
+			data-control-type="pagination" 
+			data-control-name="paging" 
+			data-control-action="paging"
+            data-range="5"
+            data-mode="google-like"
+			data-control-animate-to-top="true"> </div>
+                        </div>
+                      </div>
+                    </td>
+                </tr>
+              
+              </tbody>
+              
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="visualClear"></div>
+  <div id="portal-footer"> 
+    
+    <div id="footerBG">
+			
+	<div id="mainlinks-footer">
+		<h2 class="hiddenStructure">Footer</h2>
+		<p class="hiddenStructure"><a accesskey="8" href="#footerContent">Skip to Website Contact Info</a></p>
+		<ul>
+			<li><a title="Freedom of Information Act" href="https://www.nasa.gov/FOIA/" target="_blank"  rel="noopener">Freedom of Information Act</a></li>      
+			<li><a title="NASA Privacy Policy, Accessibility and Important Notices" href="https://www.nasa.gov/about/highlights/HP_Privacy.html" >NASA Privacy Policy, Accessibility  and Important Notices</a></li>
+			<li><a title="Information-Dissemination Priorities and Inventories" href="https://www.nasa.gov/about/contact/information_inventories_schedules.html">Information-Dissemination Priorities and Inventories</a></li>
+		</ul>
+		<ul>
+			<li><a title="Equal Employment Opportunity Data Posted Pursuant to the No Fear Act" href="https://www.nasa.gov/offices/odeo/no-fear-act">Equal Employment Opportunity Data Posted Pursuant to the No Fear Act</a></li>
+			<li><a title="Budgets, Strategic Plans and Accountability Reports" href="https://www.nasa.gov/about/budget/index.html" target="_blank"  rel="noopener">Budgets, Strategic Plans and Accountability Reports</a></li>
+			<li><a title="USA.gov" href="https://www.usa.gov/" rel="external">USA.gov</a></li>
+			<li><a rel="external" href="https://get2.adobe.com/reader/">Download Adobe Reader</a></li>
+		</ul>
+	</div> 
+	<a name="footerContent"></a>
+	<div id="secondlinks-footer"> 
+		<a href="https://www.nasa.gov" class="nasalogo"><span class="hide">National Aeronautics and Space Administration Information</span></a> 
+		<ul>
+			<li>Responsible NASA Official: <span id="nasa-responsible-official"><a href="mailto:laura.m.lucier@nasa.gov">Laura M. Lucier</a></span></li>
+			<li>Website Curator: <span id="website-curator"><a href="mailto:jsc-ares-developers@mail.nasa.gov?subject=curator.jsc.nasa.gov" title="Email Website Curator">ARES Developers</a></span></li>
+			
+			<li>Last Updated: Jan 14, 2025</li>
+			<li><a class="link-text" href="/sitemap.cfm">Site Map</a></li>
+			<li>
+			A compliant PDF will be provided upon request.<br>Contact site curator.</li>
+		</ul>
+	</div>
+</div>
+	
+<script language="javascript" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NASA&subagency=JSC&dclink=true"></script>
+
+  </div>
+  <div id="footer_end"></div>
+  
+  
+    <div id="portal-colophon">
+    <div id="ankle">
+            <h2 class="hiddenStructure">Bottom Navigation</h2>
+       <div id="ankle-links">
+             <span>
+                <a href="/index.html">Home</a>
+                <span>|</span>
+             </span>
+             <span>
+                <a href="/lunar/index.cfm">Lunar</a>
+                <span>|</span>
+             </span>
+             <span>
+             <a href="/antmet/index.cfm">Meteorites</a>
+             <span>|</span>
+             </span>
+             <span>
+                <a href="/stardust/index.cfm">Stardust</a>
+                <span>|</span>
+             </span>
+             <span>
+                <a href="/genesis/index.cfm">Genesis</a>
+                <span>|</span>
+             </span>
+             <span>
+                <a href="/dust/index.cfm">Cosmic Dust</a>
+                <span>|</span>
+             </span>
+             <span>
+                <a href="/mic/index.cfm">Microparticle Impacts</a>
+                <span>|</span>
+             </span>
+             <span>
+                <a href="/hayabusa/index.cfm">Hayabusa</a>
+                <span>|</span>
+             </span>
+             <span>
+                <a href="/hayabusa2/index.cfm">Hayabusa2</a>
+                <span>|</span>
+             </span>
+              <span>
+                <a href="/osirisrex/index.cfm">OSIRIS-REx</a>
+                <span>|</span>
+             </span>
+            <span>
+                <a href="/curation.cfm">About Us</a>
+             </span> 
+                  
+       </div>
+   	   <div id="ankle-bottom"></div>
+	</div>
+  </div>
+  <div class="visualClear"></div>
+  <script type="text/javascript">
+ jQuery(document).ready(function($){
+	$('div#portal-column-content').width("940px");
+	});
+</script> 
+</div>
+</body>
+</html>

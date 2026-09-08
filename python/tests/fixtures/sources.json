@@ -1,0 +1,292 @@
+{
+  "home": {
+    "url": "https://curator.jsc.nasa.gov/lunar/index.cfm",
+    "file": "home.html",
+    "sha256": "7444806901643f24104e77986218d1d0c15a1cc0957819ae46db8a38a07f04d7"
+  },
+  "catalog": {
+    "url": "https://curator.jsc.nasa.gov/lunar/samplecatalog/index.cfm",
+    "file": "catalog.html",
+    "sha256": "706a047f3f3bacd2229ed7e6418995b6fddfd33f6e4863c689756f7c969179ff"
+  },
+  "sample_63586": {
+    "url": "https://curator.jsc.nasa.gov/lunar/samplecatalog/sampleinfo.cfm?sample=63586",
+    "file": "sample_63586.html",
+    "sha256": "a9f5efbfc44bce71d8a7b7da5c9c5b807c3c38af70da8d77a88c21c3e10f6ba9"
+  },
+  "sample_67915": {
+    "url": "https://curator.jsc.nasa.gov/lunar/samplecatalog/sampleinfo.cfm?sample=67915",
+    "file": "sample_67915.html",
+    "sha256": "e63fa94b08947a80d48a6b58b2ae902617b8344431852e81d51cffc1e5a7abff"
+  },
+  "photo": {
+    "url": "https://curator.jsc.nasa.gov/lunar/samplecatalog/photoinfo.cfm?photo=S72-42069",
+    "file": "photo.html",
+    "sha256": "fdf6f2d07c1519d96150c0d58eb4c1312164209c1429b4e1cc800d02e515a352"
+  },
+  "thin_sections": {
+    "url": "https://curator.jsc.nasa.gov/lunar/samplecatalog/thinsections.cfm?sample=64476",
+    "file": "thin_sections.html",
+    "sha256": "45e8874ae0882f1bd9237c40fb6ef99fdd6c586804c9ecab9d6068994c1812d3"
+  },
+  "missions": {
+    "url": "https://curator.jsc.nasa.gov/rest/lunarapi/samples/listmissions",
+    "file": "missions.json",
+    "sha256": "aff54b175e58aa2a89e3a39ebb2daf638d1047aff88a2184be57a3a5b6dedfe3"
+  },
+  "api_sample": {
+    "url": "https://curator.jsc.nasa.gov/rest/lunarapi/samples/sampledetails/63586",
+    "file": "api_sample.json",
+    "sha256": "866cf560a9e8fe0e163f8295c3adc1c01949068b150931c58d8e6f2b5f590cd3"
+  },
+  "api_thin": {
+    "url": "https://curator.jsc.nasa.gov/rest/lunarapi/samples/samplethinsections/64476",
+    "file": "api_thin.json",
+    "sha256": "b60dba0fd5c762e33ebd0578992e2e396fc34107ca011f95786c1c438dc8d1f9"
+  },
+  "api_displays": {
+    "url": "https://curator.jsc.nasa.gov/rest/lunarapi/samples/sampledisplays/67915",
+    "file": "api_displays.json",
+    "sha256": "edaaeec6a001deea0e4ce1aa0e453d71f20c09e08870e8857af86f386cc870a5"
+  },
+  "search_apollo11": {
+    "url": "https://curator.jsc.nasa.gov/lunar/samplecatalog/sample_results_list.cfm",
+    "file": "search_apollo11.html",
+    "method": "POST",
+    "params": [
+      [
+        "tabType",
+        "mission"
+      ],
+      [
+        "sortOptions",
+        "sample"
+      ],
+      [
+        "searchmission",
+        "Search"
+      ],
+      [
+        "missionOptions",
+        "Apollo 11"
+      ]
+    ],
+    "fetched_at": "2026-09-08T22:36:05.502673+00:00",
+    "sha256": "af3f30158c0a1eadd8eb2c4ca8c2e7f29567b8c26eba2c12e17ea63683e02dad"
+  },
+  "photo_search_63586": {
+    "url": "https://curator.jsc.nasa.gov/lunar/samplecatalog/photo_results_list.cfm",
+    "file": "photo_search_63586.html",
+    "method": "POST",
+    "params": [
+      [
+        "tabType",
+        "advphotosearch"
+      ],
+      [
+        "sortOptions",
+        "photonumber"
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "stations",
+        ""
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "stations",
+        ""
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "stations",
+        ""
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "stations",
+        ""
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "allLandmarkValues",
+        ",,BENCH CRATER,BLOCK CRATER,HALO CRATER,HEAD CRATER,MIDDLE CRESCENT CRATER,SHARP CRATER,SURVEYOR CRATER,,BIG BERTHA,CONE CRATER,NORTH BOULDER FIELD,NORTH TRIPLET CRATER,NORTH TRIPLET RIM,TURTLE ROCK,WEIRD CRATER,WHITE ROCKS AREA,,ALSEP,APENNINE FRONT,APPENINE FRONT,DUNE CRATER,ELBOW CRATER,EVA 1,EVA 2,EVA 3,HADLEY RILLE,RHYSLING,SCARP CRATER,SPUR CRATER,ST. GEORGE CRATER,,BUSTER CRATER,CINCO B CRATER,FLAG CRATER,HOUSE ROCK,NORTH RAY CRATER,PLUM CRATER,SHADOW ROCK,SOUTH RAY CRATER,STONE MOUNTAIN,,BOULDER 1,BOULDER 2,BOULDER 3,Boulder 6,BSLSS,CAMELOT CRATER,EVA-1,EVA-2,EVA-3,GEOPHONE ROCK,HORATIO CRATER,LARA CRATER,LRV-1,LRV-10,LRV-12,LRV-2,LRV-3,LRV-4,LRV-5,LRV-6,LRV-9,NANSEN CRATER,NORTH MASSIF,SEP,SHORTY CRATER,SLUP CRATER,SOUTH MASSIF,TOMBSTONE ROCK,VAN SERG CRATER,VICTORY CRATER,WESSEX CLEFT"
+      ],
+      [
+        "allStationValues",
+        ",,A,ALSEP,B,Bg,C,C',C1,C2,Dg,Dg, G,E,F,G,G1,H,LM,,1,2,3,4,6,6A,7,8,9,9A,LM,,1,10,11,13,2,4,4B,5,6,8,9,LM,,1A,2,2A,3,4,5,6,7,8,9,ALSEP,LM,SEP"
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "allsubClassValues",
+        ",,Cristobalite,Feldspathic,Ilmenite,KREEP,Olivine,Pigeonite,Plagioclase,Unclassified,Anorthosite,Cataclasite,Cataclastic,Fragmental,Norite,Pristine,Troctolite,Agglomerate,Anorthosite,Clod,Feldspathic,Fragmental,Glass,Impact Melt,not studied,Regolith,Unclassified,unstudied,<1 mm,>10 mm,1-2 mm,1-2mm,2-4 mm,2-4mm,4-10 mm,4-10mm,Unsieved,unsieved"
+      ],
+      [
+        "searchadvphoto",
+        "Search"
+      ],
+      [
+        "advgeneric",
+        "63586"
+      ],
+      [
+        "advphoto",
+        ""
+      ]
+    ],
+    "fetched_at": "2026-09-08T22:36:20.892939+00:00",
+    "sha256": "0c373d86675f541161cab77c13ad11bcc8907d2f0858bd0aa79596b24f8ee594"
+  },
+  "photo_search_empty": {
+    "url": "https://curator.jsc.nasa.gov/lunar/samplecatalog/photo_results_list.cfm",
+    "file": "photo_search_empty.html",
+    "method": "POST",
+    "params": [
+      [
+        "tabType",
+        "advphotosearch"
+      ],
+      [
+        "sortOptions",
+        "photonumber"
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "stations",
+        ""
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "stations",
+        ""
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "stations",
+        ""
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "stations",
+        ""
+      ],
+      [
+        "landmarks",
+        ""
+      ],
+      [
+        "allLandmarkValues",
+        ",,BENCH CRATER,BLOCK CRATER,HALO CRATER,HEAD CRATER,MIDDLE CRESCENT CRATER,SHARP CRATER,SURVEYOR CRATER,,BIG BERTHA,CONE CRATER,NORTH BOULDER FIELD,NORTH TRIPLET CRATER,NORTH TRIPLET RIM,TURTLE ROCK,WEIRD CRATER,WHITE ROCKS AREA,,ALSEP,APENNINE FRONT,APPENINE FRONT,DUNE CRATER,ELBOW CRATER,EVA 1,EVA 2,EVA 3,HADLEY RILLE,RHYSLING,SCARP CRATER,SPUR CRATER,ST. GEORGE CRATER,,BUSTER CRATER,CINCO B CRATER,FLAG CRATER,HOUSE ROCK,NORTH RAY CRATER,PLUM CRATER,SHADOW ROCK,SOUTH RAY CRATER,STONE MOUNTAIN,,BOULDER 1,BOULDER 2,BOULDER 3,Boulder 6,BSLSS,CAMELOT CRATER,EVA-1,EVA-2,EVA-3,GEOPHONE ROCK,HORATIO CRATER,LARA CRATER,LRV-1,LRV-10,LRV-12,LRV-2,LRV-3,LRV-4,LRV-5,LRV-6,LRV-9,NANSEN CRATER,NORTH MASSIF,SEP,SHORTY CRATER,SLUP CRATER,SOUTH MASSIF,TOMBSTONE ROCK,VAN SERG CRATER,VICTORY CRATER,WESSEX CLEFT"
+      ],
+      [
+        "allStationValues",
+        ",,A,ALSEP,B,Bg,C,C',C1,C2,Dg,Dg, G,E,F,G,G1,H,LM,,1,2,3,4,6,6A,7,8,9,9A,LM,,1,10,11,13,2,4,4B,5,6,8,9,LM,,1A,2,2A,3,4,5,6,7,8,9,ALSEP,LM,SEP"
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "subclass",
+        ""
+      ],
+      [
+        "allsubClassValues",
+        ",,Cristobalite,Feldspathic,Ilmenite,KREEP,Olivine,Pigeonite,Plagioclase,Unclassified,Anorthosite,Cataclasite,Cataclastic,Fragmental,Norite,Pristine,Troctolite,Agglomerate,Anorthosite,Clod,Feldspathic,Fragmental,Glass,Impact Melt,not studied,Regolith,Unclassified,unstudied,<1 mm,>10 mm,1-2 mm,1-2mm,2-4 mm,2-4mm,4-10 mm,4-10mm,Unsieved,unsieved"
+      ],
+      [
+        "searchadvphoto",
+        "Search"
+      ],
+      [
+        "advgeneric",
+        "21000"
+      ],
+      [
+        "advphoto",
+        ""
+      ]
+    ],
+    "fetched_at": "2026-09-08T22:36:28.015114+00:00",
+    "sha256": "291ad704fdfdffcd61fc60ffa96e691da141b90b05292c50054f2f20d48c115e"
+  },
+  "api_apollo11": {
+    "url": "https://curator.jsc.nasa.gov/rest/lunarapi/samples/samplesbymission/Apollo%2011",
+    "file": "api_apollo11.json",
+    "method": "GET",
+    "params": [],
+    "fetched_at": "2026-09-08T22:34:56.573969+00:00",
+    "sha256": "aaa49885daa999ced6b0b958c722aef65587c92829f50492b7d00a1ddfd38c31"
+  },
+  "api_luna16": {
+    "url": "https://curator.jsc.nasa.gov/rest/lunarapi/samples/samplesbymission/Luna%2016",
+    "file": "api_luna16.json",
+    "method": "GET",
+    "params": [],
+    "fetched_at": "2026-09-08T22:35:02.550296+00:00",
+    "sha256": "534af599cce08f9fe1164166bcde2532af414dd964b0c365cbc5ecace523acad"
+  },
+  "reference_search": {
+    "url": "https://curator.jsc.nasa.gov/lunar/references/search_results.cfm?samplename=67915&author=&title=&keyword=&token=59B58053365D861E6AD9C350E0B7C92A0D390372",
+    "file": "reference_search.html",
+    "method": "GET"
+  }
+}
