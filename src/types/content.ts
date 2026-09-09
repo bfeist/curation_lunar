@@ -14,6 +14,7 @@ export interface Sample {
   description: string | null;
   sourceUrl: string | null;
   status: string;
+  preview?: string | null;
 }
 export interface Asset {
   url: string;
@@ -90,6 +91,7 @@ export interface Vocabulary {
   stations: string[];
   landmarks: string[];
   photoTypes: string[];
+  photoMissions?: string[];
   photoSubtypes: string[];
   filmTypes: string[];
 }

@@ -1,7 +1,11 @@
 import { useState } from "react";
 import type { ReactNode, FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { navigation, collections } from "../../data/navigation";
+import {
+  navigation,
+  collections,
+  curationNavigation,
+} from "../../data/navigation";
 import { catalogPath } from "../../data/routes";
 import { useData } from "../../api/useData";
 import type { DatasetInfo } from "../../types/content";
@@ -179,20 +183,7 @@ export function SiteLayout({
       <div className="site-surface">
         <header>
           <nav className="global-nav" aria-label="NASA curation navigation">
-            {[
-              ["Sample Collections", "https://curator.jsc.nasa.gov/"],
-              [
-                "Sample Request Deadlines",
-                "https://curator.jsc.nasa.gov/bboard.cfm",
-              ],
-              ["Curation News", "https://curator.jsc.nasa.gov/news.cfm"],
-              [
-                "Astromaterials Newsletter",
-                "https://curator.jsc.nasa.gov/newsletter",
-              ],
-              ["Education Samples", "/Education/index.NOTcfm"],
-              ["NASA/ARES", "https://ares.jsc.nasa.gov/"],
-            ].map(([name, url]) => (
+            {curationNavigation.map(([name, url]) => (
               <SiteLink to={url!} key={name}>
                 {name}
               </SiteLink>

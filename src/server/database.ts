@@ -40,10 +40,33 @@ export function pagination(params: URLSearchParams) {
 }
 const literalLike = (value: string) => `%${value.replace(/[\\%_]/g, "\\$&")}%`;
 
+/** Lower scores prefer ordinary sample photography over microscopy. */
+function catalogPhotoRank(description: string): number {
+  if (
+    /thin[\s_-]*section|micro(?:scope|scopic|graph)|polari[sz]ed|petrograph/i.test(
+      description,
+    )
+  )
+    return 100;
+  if (
+    !/photograph|processing|whole[\s-]*sample|(?:exterior|surface)\s+view/i.test(
+      description,
+    )
+  )
+    return 50;
+  let rank = 10;
+  if (/whole[\s-]*sample|(?:exterior|surface)\s+view/i.test(description))
+    rank -= 3;
+  if (/\bcolou?r\b/i.test(description)) rank -= 1;
+  if (/\bgroup\b|\btray\b/i.test(description)) rank += 3;
+  return rank;
+}
+
 export class LunarDatabase {
   db: DatabaseSync;
   knownPages: Set<string>;
   previews = new Map<string, string>();
+  samplePreviews = new Map<string, string>();
   constructor(path: string) {
     this.db = new DatabaseSync(path, { readOnly: true });
     this.db.exec("PRAGMA query_only=ON; PRAGMA busy_timeout=1000");
@@ -70,6 +93,7 @@ export class LunarDatabase {
     );
     // Gallery images are available before photo-detail enrichment. Use only
     // captured image URLs paired with their actual photo link; never guess paths.
+    const captions = new Map<string, Set<string>>();
     for (const page of this.rows<{ url: string; html: string }>(
       "SELECT url, main_html html FROM pages WHERE page_type IN ('sample_page','photo_results')",
     )) {
@@ -82,12 +106,46 @@ export class LunarDatabase {
         try {
           const id = new URL(href, page.url).searchParams.get("photo");
           const url = new URL(src, page.url);
-          if (id && ["http:", "https:"].includes(url.protocol))
+          if (id && ["http:", "https:"].includes(url.protocol)) {
             this.previews.set(id, url.href);
+            const descriptions = captions.get(id) ?? new Set<string>();
+            descriptions.add(img.attr("alt") ?? "");
+            descriptions.add(img.closest("a").attr("title") ?? "");
+            captions.set(id, descriptions);
+          }
         } catch {
           /* Malformed source URLs are omitted. */
         }
       });
+    }
+    // Resolve catalog thumbnails once, using observed photo URLs. No per-card
+    // detail requests or additional network acquisition are needed. Captured
+    // captions identify thin sections even while photo-detail rows are stubs.
+    const ranks = new Map<string, number>();
+    for (const link of this.rows<{
+      generic: string;
+      photo: string;
+      type: string | null;
+      subtype: string | null;
+      description: string | null;
+    }>(
+      "SELECT DISTINCT sp.generic, sp.photo_id photo, p.photo_type type, p.photo_subtype subtype, p.description FROM sample_photos sp JOIN photos p ON p.photo_id=sp.photo_id ORDER BY sp.generic, sp.photo_id",
+    )) {
+      const preview = this.previews.get(link.photo);
+      const rank = catalogPhotoRank(
+        [
+          link.type,
+          link.subtype,
+          link.description,
+          ...(captions.get(link.photo) ?? []),
+        ]
+          .filter(Boolean)
+          .join(" "),
+      );
+      if (preview && rank < (ranks.get(link.generic) ?? Infinity)) {
+        this.samplePreviews.set(link.generic, preview);
+        ranks.set(link.generic, rank);
+      }
     }
   }
   close() {
@@ -122,6 +180,7 @@ export class LunarDatabase {
       stations: distinct("samples", "station_raw", true),
       landmarks: distinct("samples", "landmark_raw", true),
       photoTypes: distinct("photos", "photo_type"),
+      photoMissions: distinct("photos", "mission_raw"),
       photoSubtypes: distinct("photos", "photo_subtype"),
       filmTypes: distinct("photos", "film_type"),
     };
@@ -179,7 +238,10 @@ export class LunarDatabase {
       items: this.rows<Sample>(
         `SELECT ${sampleColumns} FROM samples${where} ORDER BY ${sort} LIMIT ? OFFSET ?`,
         [...args, pageSize, (page - 1) * pageSize],
-      ),
+      ).map((sample) => ({
+        ...sample,
+        preview: this.samplePreviews.get(sample.id) ?? null,
+      })),
       total: this.one<{ n: number }>(
         `SELECT count(*) n FROM samples${where}`,
         args,
@@ -324,11 +386,19 @@ export class LunarDatabase {
     };
   }
   page(path: string): EditorialPage | undefined {
-    if (/\.cfm$/i.test(path)) return;
-    const canonical = canonicalPagePath(path);
+    if (!path.startsWith("/") || path.startsWith("//")) return;
+    const requested = new URL(path, nasaOrigin);
+    if (/\.cfm$/i.test(requested.pathname)) return;
+    const canonical = canonicalPagePath(requested.pathname);
     const page = this.one<{ title: string; url: string; html: string }>(
       "SELECT title,url,main_html html FROM pages WHERE lower(url)=? AND page_type='page'",
-      [nasaOrigin + canonical.replace(/\.NOTcfm$/, ".cfm")],
+      [
+        (
+          nasaOrigin +
+          canonical.replace(/\.NOTcfm$/, ".cfm") +
+          requested.search
+        ).toLowerCase(),
+      ],
     );
     if (!page) return;
     return {

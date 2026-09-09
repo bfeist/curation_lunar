@@ -6,10 +6,12 @@ import { ResultsPage } from "./pages/ResultsPage";
 import { SamplePage } from "./pages/SamplePage";
 import { PhotoPage } from "./pages/PhotoPage";
 import { ReferencesPage } from "./pages/ReferencesPage";
+import { NewSite } from "./new/NewSite";
 
 function RouteEffects() {
   const location = useLocation();
   useEffect(() => {
+    if (location.pathname.startsWith("/new")) return;
     document.title = "Lunar Samples — Astromaterials Curation";
     if (!location.hash) window.scrollTo(0, 0);
     else
@@ -26,6 +28,7 @@ export function App() {
     <BrowserRouter>
       <RouteEffects />
       <Routes>
+        <Route path="/new/*" element={<NewSite />} />
         <Route
           path="/lunar/samplecatalog/index.NOTcfm"
           element={<CatalogPage />}

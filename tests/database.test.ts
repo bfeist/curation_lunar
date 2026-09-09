@@ -32,10 +32,14 @@ beforeAll(async () => {
     ('10006','Apollo 11','Basalt','Fine',0,NULL,0,'1'),
     ('21000','Luna 16','Soil','<1 mm',50,25,1,'1');
     INSERT INTO photos(photo_id,detail_url) VALUES ('S72-42069','https://curator.jsc.nasa.gov/lunar/samplecatalog/photoinfo.cfm?photo=S72-42069');
+    INSERT INTO photos(photo_id) VALUES ('10006_THIN'),('10006_UNKNOWN');
+    INSERT INTO sample_photos(id,generic,photo_id) VALUES ('thin-photo','10006','10006_THIN'),('unknown-photo','10006','10006_UNKNOWN');
     INSERT INTO sample_photos(id,generic,photo_id) VALUES ('a','63586','S72-42069'),('b','63586','S72-42069'),('c','10006','S72-42069');
     INSERT INTO thin_sections(id,generic,specific,weight_g,availability_label,source_json) VALUES ('thin','63586','4',0.01,'Available','{}');
     INSERT INTO pages(url,page_type,title,main_html) VALUES ('https://curator.jsc.nasa.gov/lunar/index.cfm','page','Lunar Samples','<p>Hello</p>');
-    INSERT INTO pages(url,page_type,title,main_html) VALUES ('https://curator.jsc.nasa.gov/lunar/samplecatalog/sampleinfo.cfm?sample=63586','sample_page','Sample','<a href="photoinfo.cfm?photo=S72-42069"><img data-original="photos/observed.jpg"></a>');`);
+    INSERT INTO pages(url,page_type,title,main_html) VALUES ('https://curator.jsc.nasa.gov/lunar/cores/corephotos.cfm?core=10004','page','Core 10004','<p>Core photographs</p>');
+    INSERT INTO pages(url,page_type,title,main_html) VALUES ('https://curator.jsc.nasa.gov/lunar/samplecatalog/sampleinfo.cfm?sample=63586','sample_page','Sample','<a href="photoinfo.cfm?photo=S72-42069" title="Color processing photograph of the sample"><img data-original="photos/observed.jpg"></a>');
+    INSERT INTO pages(url,page_type,title,main_html) VALUES ('https://curator.jsc.nasa.gov/lunar/samplecatalog/sampleinfo.cfm?sample=10006','sample_page','Sample','<a href="photoinfo.cfm?photo=10006_THIN"><img alt="Color Thin Section Photograph in Cross-Polarized Light" src="photos/thin.jpg"></a><a href="photoinfo.cfm?photo=10006_UNKNOWN"><img src="photos/unknown.jpg"></a>');`);
   fixture.close();
   database = new LunarDatabase(path);
   const app = createApp(database, "Test snapshot");
@@ -79,6 +83,9 @@ describe("read-only data contract", () => {
   it("serves production assets and demo deep links from a .local build directory", async () => {
     for (const path of [
       "/",
+      "/new",
+      "/new/catalog?mission=Apollo+11",
+      "/new/samples/63586",
       "/lunar/samplecatalog/sampleinfo.NOTcfm?sample=63586",
     ]) {
       const response = await fetch(base + path);
@@ -140,6 +147,57 @@ describe("read-only data contract", () => {
     );
     expect(database.sample("63586")!.photos[0]?.preview).toBe(
       database.photo("S72-42069")!.photo.preview,
+    );
+  });
+  it("includes observed catalog thumbnails without duplicating sample results", () => {
+    const result = database.samples(new URLSearchParams());
+    expect(result.total).toBe(3);
+    expect(result.items.map((sample) => sample.id)).toEqual([
+      "10006",
+      "21000",
+      "63586",
+    ]);
+    expect(
+      result.items.find((sample) => sample.id === "21000")?.preview,
+    ).toBeNull();
+    for (const id of ["10006", "63586"])
+      expect(result.items.find((sample) => sample.id === id)?.preview).toBe(
+        "https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/observed.jpg",
+      );
+    const batches = [1, 2, 3].flatMap(
+      (page) =>
+        database.samples(
+          new URLSearchParams({ page: String(page), pageSize: "1" }),
+        ).items,
+    );
+    expect(batches.map((sample) => sample.id)).toEqual(
+      result.items.map((sample) => sample.id),
+    );
+  });
+  it("prefers sample photography over alphabetically earlier thin sections and unclassified images", () => {
+    const detail = database.sample("10006")!;
+    expect(detail.photos.map((photo) => photo.id)).toEqual([
+      "10006_THIN",
+      "10006_UNKNOWN",
+      "S72-42069",
+    ]);
+    expect(detail.photos[0]?.preview).toContain("thin.jpg");
+    expect(
+      database.samples(new URLSearchParams("q=10006")).items[0]?.preview,
+    ).toContain("observed.jpg");
+  });
+  it("serves distinct query-specific resources without accepting old .cfm aliases", () => {
+    expect(
+      database.page("/lunar/cores/corephotos.NOTcfm?core=10004")?.title,
+    ).toBe("Core 10004");
+    expect(
+      database.page("/lunar/cores/corephotos.NOTcfm?core=10005"),
+    ).toBeUndefined();
+    expect(
+      database.page("/lunar/cores/corephotos.cfm?core=10004"),
+    ).toBeUndefined();
+    expect(database.vocabulary(new URLSearchParams()).photoMissions).toEqual(
+      [],
     );
   });
   it("rejects writes at SQLite and HTTP layers", async () => {

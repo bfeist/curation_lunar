@@ -2,6 +2,8 @@
 
 Assessment date: September 9, 2026. Run: `full-2026-09-08`.
 
+The `/new` redesign now consumes this checkpoint. See [the design-specific data assessment](new-design.md#data-assessment-for-the-design) for measured thumbnail coverage, photo-filter limitations, query-specific editorial resources, and the next design/research investigations. The redesign does not restart or alter acquisition.
+
 ## Decision
 
 The full run produced a useful application checkpoint, but it did **not** finish. It paused after a run of source records with no separate detail representation. Those responses are now classified as source-unavailable outcomes, the same run is resumable, and no completed response will be fetched again. The app at `http://localhost:3005` now uses an immutable export of this checkpoint while acquisition continues against the separate working database.

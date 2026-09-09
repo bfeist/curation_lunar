@@ -1,0 +1,516 @@
+.new-site .n-expanded-header {
+  position: relative;
+}
+.new-site .n-agency-navigation {
+  position: relative;
+  z-index: 30;
+  background: #000;
+  border-bottom: 1px solid #34343a;
+}
+.new-site .n-agency-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 80px minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  min-height: 106px;
+}
+.new-site .n-agency-explore,
+.new-site .n-agency-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+}
+.new-site .n-agency-actions {
+  justify-content: flex-end;
+}
+.new-site .n-menu-trigger {
+  appearance: none;
+  color: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.new-site .n-menu-trigger:hover,
+.new-site .n-menu-trigger[aria-expanded="true"] {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+}
+.new-site .n-menu-chevron {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+}
+.new-site .n-menu-trigger[aria-expanded="true"] .n-menu-chevron {
+  transform: rotate(180deg);
+}
+.new-site .n-agency-logo {
+  justify-self: center;
+  display: block;
+  flex-shrink: 0;
+}
+.new-site .n-agency-logo img {
+  width: 64px;
+  height: auto;
+  object-fit: contain;
+}
+.new-site .n-agency-search {
+  display: flex;
+  border: 1px solid #77777f;
+  min-width: 0;
+  max-width: 210px;
+  flex: 1;
+}
+.new-site .n-agency-search input {
+  width: 100%;
+  min-width: 0;
+  color: #fff;
+  background: none;
+  border: 0;
+  padding: 10px;
+  font-size: 12px;
+}
+.new-site .n-agency-search input::placeholder {
+  color: #bcbcc3;
+  opacity: 1;
+}
+.new-site .n-agency-search button {
+  color: #fff;
+  background: none;
+  border: 0;
+  padding: 3px 10px;
+  font-size: 24px;
+  line-height: 1;
+}
+.new-site .n-nasa-plus {
+  color: #fff;
+  white-space: nowrap;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.new-site .n-nasa-plus span {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 400;
+}
+.new-site .n-project-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  min-height: 100px;
+}
+.new-site .n-project-name {
+  font-size: 29px;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  color: white;
+  line-height: 1.15;
+}
+.new-site .n-project-name:hover {
+  text-decoration: none;
+}
+.new-site .n-project-name small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #c3c3cd;
+  margin-top: 7px;
+}
+.new-site .n-project-preview {
+  margin-left: auto;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b2b2bd;
+}
+.new-site .n-project-toggle {
+  display: none;
+}
+.new-site .n-project-navigation {
+  position: relative;
+  border-top: 1px solid #34343a;
+}
+.new-site .n-project-nav-inner {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 25px;
+  min-height: 61px;
+}
+.new-site .n-primary-catalog {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: inset 0 -4px var(--n-red);
+  white-space: nowrap;
+  padding: 17px 0;
+}
+.new-site .n-project-nav-group .n-menu-trigger {
+  font-size: 14px;
+}
+.new-site .n-mega-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 25;
+  background: #18181c;
+  box-shadow: 0 18px 28px #0005;
+  border-top: 1px solid #48484e;
+  color: white;
+  max-height: calc(100dvh - 70px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.new-site .n-mega-content {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(0, 2.5fr);
+  gap: 48px;
+  padding-top: 45px;
+  padding-bottom: 45px;
+}
+.new-site .n-menu-intro {
+  border-right: 1px solid #46464c;
+  padding-right: 30px;
+}
+.new-site .n-menu-intro .n-eyebrow {
+  font-size: 9px;
+  color: #b7b7c0;
+  line-height: 1.7;
+}
+.new-site .n-menu-intro h2 {
+  font-size: 30px;
+  line-height: 1.12;
+  margin-bottom: 17px;
+}
+.new-site .n-menu-intro > p:not(.n-eyebrow) {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #bebec8;
+  margin-bottom: 24px;
+}
+.new-site .n-menu-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  align-content: start;
+}
+.new-site .n-menu-columns h3 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.065em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: #b8b8c1;
+  border-bottom: 1px solid #51515a;
+  padding-bottom: 13px;
+  margin-bottom: 0;
+}
+.new-site .n-menu-columns ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.new-site .n-menu-columns li {
+  margin: 0;
+}
+.new-site .n-menu-columns a {
+  display: block;
+  padding: 14px 0;
+  border-bottom: 1px solid #37373f;
+  color: white;
+}
+.new-site .n-menu-link-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.new-site .n-menu-link-label > span {
+  font-size: 18px;
+  flex-shrink: 0;
+  color: #bcbcc8;
+}
+.new-site .n-menu-link-description {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #bdbdc7;
+  font-weight: 400;
+}
+.new-site .n-menu-overview-link {
+  display: block;
+  color: white;
+}
+.new-site .n-menu-overview-link .n-menu-link-label > span {
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  text-align: center;
+  background: var(--n-red);
+  color: white;
+}
+.new-site .n-menu-close {
+  position: absolute;
+  right: 64px;
+  top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: none;
+  color: #c3c3cc;
+  font-size: 10px;
+  padding: 3px;
+}
+.new-site .n-menu-close span {
+  font-size: 22px;
+  line-height: 1;
+}
+.new-site .n-agency-panel {
+  background: #101014;
+}
+.new-site .n-agency-menu-search {
+  display: flex;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 22px;
+}
+@media (max-width: 1100px) {
+  .new-site .n-agency-bar {
+    grid-template-columns: minmax(0, 1fr) 70px minmax(0, 1fr);
+    gap: 20px;
+  }
+  .new-site .n-agency-explore,
+  .new-site .n-agency-actions {
+    gap: 16px;
+  }
+  .new-site .n-agency-search {
+    max-width: 170px;
+  }
+  .new-site .n-menu-trigger {
+    font-size: 13px;
+    gap: 9px;
+  }
+  .new-site .n-project-nav-inner {
+    gap: 20px;
+  }
+  .new-site .n-project-nav-group .n-menu-trigger,
+  .new-site .n-primary-catalog {
+    font-size: 12px;
+  }
+  .new-site .n-mega-content {
+    grid-template-columns: minmax(160px, 0.7fr) minmax(0, 2.4fr);
+    gap: 28px;
+  }
+  .new-site .n-menu-columns {
+    gap: 22px;
+  }
+  .new-site .n-menu-intro {
+    padding-right: 22px;
+  }
+  .new-site .n-menu-intro h2 {
+    font-size: 27px;
+  }
+  .new-site .n-menu-link-label {
+    font-size: 13px;
+  }
+  .new-site .n-menu-close {
+    right: 32px;
+  }
+}
+@media (max-width: 900px) {
+  .new-site .n-agency-search {
+    display: none;
+  }
+  .new-site .n-agency-menu-search {
+    display: flex;
+  }
+  .new-site .n-agency-bar {
+    grid-template-columns: minmax(0, 1fr) 66px minmax(0, 1fr);
+  }
+  .new-site .n-menu-columns {
+    gap: 20px;
+  }
+  .new-site .n-mega-content {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .new-site .n-menu-intro {
+    border-right: 0;
+    border-bottom: 1px solid #46464c;
+    padding-right: 0;
+    padding-bottom: 24px;
+  }
+  .new-site .n-menu-intro > p:not(.n-eyebrow) {
+    max-width: 650px;
+    margin-bottom: 15px;
+  }
+  .new-site .n-menu-overview-link {
+    max-width: 320px;
+  }
+  .new-site .n-project-nav-inner {
+    gap: 14px;
+  }
+}
+@media (max-width: 760px) {
+  .new-site .n-agency-bar {
+    grid-template-columns: 1fr 55px 1fr;
+    min-height: 126px;
+    gap: 0;
+    padding-top: 12px;
+    padding-bottom: 0;
+  }
+  .new-site .n-agency-explore {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .new-site .n-agency-logo {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .new-site .n-agency-logo img {
+    width: 55px;
+    height: auto;
+  }
+  .new-site .n-agency-actions {
+    grid-column: 1/-1;
+    grid-row: 2;
+    justify-content: flex-start;
+    gap: 25px;
+  }
+  .new-site .n-nasa-plus {
+    margin-left: auto;
+    font-size: 16px;
+  }
+  .new-site .n-nasa-plus span {
+    font-size: 23px;
+  }
+  .new-site .n-menu-trigger {
+    font-size: 13px;
+    padding: 15px 0;
+  }
+  .new-site .n-menu-chevron {
+    height: 15px;
+    width: 15px;
+  }
+  .new-site .n-project-bar {
+    min-height: 91px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    gap: 10px;
+  }
+  .new-site .n-project-name {
+    font-size: 23px;
+  }
+  .new-site .n-project-name small {
+    font-size: 9px;
+    max-width: 190px;
+    line-height: 1.5;
+  }
+  .new-site .n-project-preview {
+    display: none;
+  }
+  .new-site .n-project-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    flex-shrink: 0;
+    padding: 10px 8px;
+    background: transparent;
+    color: #fff;
+    border: 1px solid #6b6b74;
+    font-size: 11px;
+    margin-left: auto;
+  }
+  .new-site .n-project-navigation {
+    display: none;
+  }
+  .new-site .n-project-navigation.is-open {
+    display: block;
+  }
+  .new-site .n-project-nav-inner {
+    display: block;
+    padding-bottom: 18px;
+  }
+  .new-site .n-primary-catalog {
+    font-size: 15px;
+    box-shadow: none;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--n-red);
+  }
+  .new-site .n-project-nav-group .n-menu-trigger {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 14px;
+    border-bottom: 1px solid #494950;
+    padding: 18px 0;
+  }
+  .new-site .n-project-navigation .n-mega-panel {
+    position: static;
+    box-shadow: none;
+    max-height: none;
+    border: 0;
+    overflow: visible;
+  }
+  .new-site .n-project-navigation .n-mega-content {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 40px;
+    padding-bottom: 24px;
+  }
+  .new-site .n-menu-columns {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .new-site .n-menu-intro h2 {
+    font-size: 27px;
+  }
+  .new-site .n-menu-columns a {
+    padding: 13px 0;
+  }
+  .new-site .n-menu-link-label {
+    font-size: 14px;
+  }
+  .new-site .n-menu-link-description {
+    font-size: 13px;
+  }
+  .new-site .n-menu-close {
+    right: 22px;
+  }
+  .new-site .n-project-navigation .n-menu-close {
+    right: 15px;
+  }
+  .new-site .n-agency-panel {
+    max-height: calc(100dvh - 130px);
+  }
+  .new-site .n-agency-panel .n-mega-content {
+    padding-top: 42px;
+    padding-bottom: 30px;
+  }
+}

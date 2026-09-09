@@ -1,3 +1,12 @@
+export const curationNavigation = [
+  ["Sample Collections", "https://curator.jsc.nasa.gov/"],
+  ["Sample Request Deadlines", "https://curator.jsc.nasa.gov/bboard.cfm"],
+  ["Curation News", "https://curator.jsc.nasa.gov/news.cfm"],
+  ["Astromaterials Newsletter", "https://curator.jsc.nasa.gov/newsletter"],
+  ["Education Samples", "/Education/index.NOTcfm"],
+  ["NASA/ARES", "https://ares.jsc.nasa.gov/"],
+] as const;
+
 export const navigation = [
   {
     title: "Sample Requests / Returns",
