@@ -49,6 +49,16 @@ def test_photo_preserves_external_tiff_and_specific_zero(setup_pipeline):
     assert photo["orientation_raw"] == "S1"
     assert any("amazonaws.com" in a["url"] and a["url"].endswith(".TIF") for a in store.rows("SELECT url FROM assets"))
     assert {r["generic"] for r in store.rows("SELECT generic FROM sample_photos")} == {"63586"}
+    assert not store.rows("SELECT * FROM requests WHERE url LIKE '%feedbackform.cfm%'")
+
+
+def test_queued_feedback_forms_are_excluded_without_a_network_request(setup_pipeline):
+    store, pipeline, _ = setup_pipeline
+    with store.db:
+        request_id = store.enqueue("https://curator.jsc.nasa.gov/lunar/samplecatalog/feedbackform.cfm?photo=S72-42069", "page")
+    pipeline.run(max_requests=1)
+    request = store.rows("SELECT state,outcome FROM requests WHERE request_id=?", (request_id,))[0]
+    assert request == {"state": "parsed", "outcome": "excluded_interactive_form"}
 
 
 def test_full_browser_form_controls_and_luna_values():
@@ -142,8 +152,9 @@ def test_full_mode_schedules_independent_inventories(setup_pipeline):
     ingest_fixture(store, pipeline, "catalog", "catalog")
     tasks = store.rows("SELECT context_json FROM requests WHERE kind='photo_results'")
     partitions = {json.loads(r["context_json"])["partition"] for r in tasks}
-    assert len(partitions) == 40
-    assert {"Apollo 11/ortho", "Apollo 17/thin section", "Luna 24/processing", "ALL/stereo"} <= partitions
+    assert len(partitions) == 33
+    assert {"Apollo 11/ortho", "Luna 24/processing"} <= partitions
+    assert not partitions & {"Apollo 15/processing", "Apollo 16/processing", "Apollo 17/thin section", "ALL/ortho", "ALL/stereo", "ALL/thin section", "ALL/processing"}
     pipeline.alternate_inventory({"endpoint": "listsampleclassification"}, {"SAMPLETYPE": "Soil", "SAMPLESUBTYPE": "<1 mm"})
     assert store.rows("SELECT url FROM requests WHERE kind='alternate_samples'")
 

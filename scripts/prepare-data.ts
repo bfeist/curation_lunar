@@ -1,8 +1,15 @@
 import { DatabaseSync, backup } from "node:sqlite";
-import { mkdir, readFile, rename, writeFile, rm } from "node:fs/promises";
+import { mkdir, rename, writeFile, rm } from "node:fs/promises";
 import { resolve, basename, dirname } from "node:path";
 import { createHash } from "node:crypto";
-import { existsSync } from "node:fs";
+import { createReadStream, existsSync } from "node:fs";
+
+async function hashFile(path: string) {
+  const hash = createHash("sha256");
+  const stream = createReadStream(path);
+  for await (const chunk of stream) hash.update(chunk);
+  return hash.digest("hex");
+}
 
 const root = resolve(import.meta.dirname, "..");
 const source = resolve(
@@ -35,15 +42,11 @@ try {
 } finally {
   snapshot.close();
 }
-const hash = createHash("sha256")
-  .update(await readFile(temporary))
-  .digest("hex");
+const hash = await hashFile(temporary);
 const file = `lunar-${hash.slice(0, 16)}.sqlite`;
 const destination = resolve(output, file);
 if (existsSync(destination)) {
-  const existingHash = createHash("sha256")
-    .update(await readFile(destination))
-    .digest("hex");
+  const existingHash = await hashFile(destination);
   if (existingHash !== hash)
     throw new Error("Existing snapshot hash does not match its filename.");
   await rm(temporary);

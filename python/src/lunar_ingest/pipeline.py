@@ -22,6 +22,21 @@ HTML_SAMPLE_FIELDS = {
     "Description": "description",
 }
 
+# These catalog searches consistently exceed the public site's response window.
+# `ALL/*` is an optional cross-check for unassigned photos, while the three
+# mission/type combinations have no usable public response. They are not
+# required to acquire details for IDs found through galleries and responsive
+# mission/type searches.
+SKIPPED_PHOTO_SEARCH_PARTITIONS = {
+    "Apollo 15/processing",
+    "Apollo 16/processing",
+    "Apollo 17/thin section",
+    "ALL/ortho",
+    "ALL/stereo",
+    "ALL/thin section",
+    "ALL/processing",
+}
+
 
 class Pipeline:
     def __init__(self, store, config):
@@ -97,6 +112,11 @@ class Pipeline:
             for photo_id in query.get("photo", []):
                 if self.config["mode"] == "full" or base_context.get("generic") in self.config["samples"]:
                     self.schedule_photo(photo_id, url)
+            return
+        if path.endswith("feedbackform.cfm"):
+            # Every catalog detail page carries a photo- or sample-specific
+            # "Report a problem" link. It is an interactive submission form,
+            # not editorial content, so never fan out one request per record.
             return
         if path.endswith("thinsections.cfm"):
             generic = query.get("sample", [None])[0]
@@ -312,6 +332,7 @@ class Pipeline:
             # the documented photo vocabulary and remain independently auditable.
             queries = [(f"{mission}/{photo_type}", {"missionOptions": mission, "photoOptions": photo_type, "advgeneric": "", "advphoto": ""}) for mission in missions for photo_type in photo_types]
             queries.extend((f"ALL/{photo_type}", {"missionOptions": None, "photoOptions": photo_type, "advgeneric": "", "advphoto": ""}) for photo_type in photo_types)
+            queries = [(partition, overrides) for partition, overrides in queries if partition not in SKIPPED_PHOTO_SEARCH_PARTITIONS]
             sample_adv = soup.select_one("form#advsamplesearch")
             if sample_adv:
                 self.store.enqueue(absolute_url(url, sample_adv.get("action")), "sample_results", {"partition": "ALL"}, html.successful_controls(sample_adv, {"missionOptions": None, "generic": ""}), priority=25)
@@ -455,8 +476,12 @@ class Pipeline:
     def run(self, max_requests=100, retry_failed=False, delay=None):
         effective_delay = self.config["delay"] if delay is None else delay
         client = Client(self.store, delay=effective_delay, max_requests=max_requests, user_agent=self.config["user_agent"])
-        if retry_failed:
-            with self.store.db:
+        with self.store.db:
+            # Older runs may already have queued a per-record feedback form
+            # before `follow` began excluding it. Treat any such request as a
+            # deliberate terminal exclusion, never as content to fetch.
+            self.store.db.execute("UPDATE requests SET state='parsed',outcome='excluded_interactive_form',error=NULL WHERE state IN ('pending','fetched') AND lower(url) LIKE '%/feedbackform.cfm%'")
+            if retry_failed:
                 self.store.db.execute("UPDATE requests SET state='pending',error=NULL WHERE state='failed'")
         processed, failures = 0, 0
         while True:
