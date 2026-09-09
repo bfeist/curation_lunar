@@ -44,7 +44,7 @@ npm run data:prepare
 npm run dev
 ```
 
-`data:prepare` defaults to the **completed pilot export**, `data/runs/pilot-2026-09-08/exports/lunar.sqlite`. It opens that file read-only, checks integrity and foreign keys, uses SQLite's backup API to make a consistent snapshot, hashes the copy, and writes `.local/data/dataset.json` pointing to a versioned `.sqlite` file. It never connects to the active full scan. The Python extractor, its environment, and its running database remain separate.
+`data:prepare` defaults to the latest **full-run export**, `data/runs/full-2026-09-08/exports/lunar.sqlite`. It opens that export read-only, checks integrity and foreign keys, uses SQLite's backup API to make a consistent snapshot, converts the independent copy from WAL to `DELETE` journal mode for a self-contained read-only mount, hashes it, and writes `.local/data/dataset.json` pointing to the versioned `.sqlite` file. It never connects to the active full scan. The Python extractor, its environment, and its working database remain separate. Until review finishes, use a label that says the snapshot is a checkpoint or candidate.
 
 `src/server/server.ts` is the entry point for development and production. Development mounts Vite as middleware in the same HTTP process, so the browser uses one origin and one port. React source lives under `src/components`, `src/pages`, `src/api`, `src/data`, `src/styles`, and `src/types`. Vite emits `.local/dist/`.
 
@@ -59,7 +59,7 @@ npm start
 
 Stop the development process first because both commands default to port 3003. `PORT` changes the port; `HOST` defaults to `127.0.0.1`. `LUNAR_DB` can point directly to an independently staged SQLite snapshot; set `LUNAR_DATASET_LABEL` with it to identify that dataset. Missing databases, incompatible tables, and missing production builds fail startup with an actionable error. `GET /api/health` verifies that the application can read the selected dataset.
 
-## Replace the pilot after acquisition and review
+## Promote a completed acquisition candidate
 
 Wait for the full scan's acquisition/export process and the content review described in [full-scan-and-next-steps.md](full-scan-and-next-steps.md). A finished crawl alone is not acceptance.
 

@@ -31,6 +31,11 @@ def main(argv=None):
         if name == "resume":
             command.add_argument("--max-requests", type=int, default=120)
             command.add_argument("--retry-failed", action="store_true")
+            command.add_argument(
+                "--delay",
+                type=float,
+                help="Override the saved delay for this invocation (seconds between request starts)",
+            )
     args = parser.parse_args(argv)
     if args.command == "start":
         if Path(args.run).name != args.run or args.run in (".", ".."):
@@ -58,9 +63,9 @@ def main(argv=None):
             validate(store, config)
             print(f"{state}: {root}")
         elif args.command == "resume":
-            if args.max_requests < 0:
-                parser.error("--max-requests must be nonnegative")
-            state = pipeline.run(args.max_requests, args.retry_failed)
+            if args.max_requests < 0 or (args.delay is not None and args.delay < 0):
+                parser.error("--max-requests and --delay must be nonnegative")
+            state = pipeline.run(args.max_requests, args.retry_failed, args.delay)
             validate(store, config)
             print(f"{state}: {root}")
         elif args.command == "parse":

@@ -13,6 +13,6 @@ The directory structure follows `../airt2`: React/TypeScript, Vite, Vitest, ESLi
 - `server/app.ts` implements read-only HTTP endpoints. `server/server.ts` starts Express and either Vite middleware or the production static frontend.
 - `styles/global.css` recreates the original visual structure with grid/flex and one mobile breakpoint at 800px. Source stylesheets are not imported.
 
-`npm run data:prepare` creates a separate versioned website snapshot. `npm run dev` watches server/data/type source and lets Vite handle frontend hot updates. `npm run build` creates `.local/dist`; `npm start` serves that build plus the API. See `docs/hosting.md` for the data-copy and production-startup plan.
+`npm run data:prepare` creates a separate versioned website snapshot from the full-run export by default. It converts the copy out of WAL mode so the single file works on a read-only container mount. `npm run dev` watches server/data/type source and lets Vite handle frontend hot updates. `npm run build` creates `.local/dist`; `npm start` serves that build plus the API. See `docs/hosting.md` for the data-copy and production-startup plan.
 
 `npm run docker:up` builds the multi-stage Docker image and starts the Node-only Compose service at http://localhost:3005. The prepared `.local/data` directory is mounted read-only and excluded from the image. Re-run that command after code changes; after a data snapshot switch, use `docker compose -f dockercompose.yml restart web`.

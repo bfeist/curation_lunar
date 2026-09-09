@@ -1,6 +1,6 @@
 # NASA Lunar Curation: reverse engineering of the current public website
 
-Status: Python acquisition implementation and live pilot completed; full acquisition `full-2026-09-08` started September 8, 2026 and is running at the documented handoff. See [full scan status and next steps](full-scan-and-next-steps.md) for monitoring and the ordered follow-up work. Full acquisition acceptance and website parity review remain outstanding. See `/python/README.md` for executable commands and generated run reports for actual coverage. The React application has not been built.
+Status: Python acquisition and the React/SQLite application are implemented. Full acquisition `full-2026-09-08` started September 8, 2026, produced an application checkpoint, and is resumable after assessment. See [full scan status and next steps](full-scan-and-next-steps.md) and the [full-run data assessment](full-data-assessment.md). Full acquisition acceptance and website parity review remain outstanding.
 
 Inspected: September 8, 2026.
 
@@ -248,7 +248,7 @@ Acquire every remaining item in the content-parity matrix, including catalog/com
 
 ## 6. Request behavior and reproducibility
 
-- Start with one in-flight request and at least one second between requests to the host. Estimate total requests from discovered samples/photos and adjust the run schedule, not the source workload assumptions.
+- Start the baseline with one in-flight request and at least one second between requests to the host. After measuring source behavior, a resumable invocation may use a documented lower delay while remaining sequential and retaining retry, `Retry-After`, and denial-stop protections. Estimate total requests from discovered samples/photos and adjust the run schedule, not the source workload assumptions.
 - Use an identifiable configurable User-Agent. Set connection/read timeouts; bounded retries with exponential backoff and jitter for transient failures; honor `Retry-After` and stop repeated denial/error patterns.
 - Cache by method + normalized URL + ordered/multivalue request parameters. A URL alone cannot distinguish different POST searches. Preserve original request data for reproduction.
 - Persist the queue and each outcome so interruption/resume does not restart the harvest. Bound attempts and report permanently failed items.

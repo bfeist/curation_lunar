@@ -38,6 +38,14 @@ The full baseline `full-2026-09-08` was launched on September 8, 2026. See [scan
 
 `--max-requests` is a per-invocation HTTP budget, including retries and redirects. Hitting it pauses a persisted queue. Use `--max-requests 0` for an unbounded invocation only when intending a long run. `Ctrl+C` preserves completed requests. Resume does not fetch successful cached responses again.
 
+`resume` also accepts `--delay <seconds>` to override the run's saved delay for one invocation. The `full-2026-09-08` evidence supports a 0.25-second sequential delay: retries, `Retry-After`, denial stops, and request persistence still apply, and `progress.json` records the effective delay. The Windows supervisor resumes that exact queue, validates, and exports it:
+
+```powershell
+powershell -NoProfile -File scripts/run-full-scan.ps1 -RunName full-2026-09-08 -Resume -PrepareApp -Delay 0.25
+```
+
+`-PrepareApp` changes the application snapshot only after the acquisition queue finishes and validation has zero unresolved errors. It does not turn that candidate into a reviewed parity release. See [the full-run assessment](../docs/full-data-assessment.md) for the measured redundancy and remaining investigations.
+
 The baseline intentionally requests related API endpoints even when summary flags are null/false. All records discovered through any source remain in the dataset. Unknown fields are retained and flagged; missing/error pages are not treated as empty successful results.
 
 The crawler follows observed links and captures forms but only automatically submits the known, read-only sample/photo/bibliography search forms. It does not submit sample requests, send messages, or traverse entire external sites. Other forms and dynamically loaded content are captured for review. A public inventory that caps results or hides additional content can require a new adapter; inspect the reports before calling acquisition complete.

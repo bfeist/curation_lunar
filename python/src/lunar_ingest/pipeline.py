@@ -46,7 +46,21 @@ class Pipeline:
         self.store.sample_stub(generic)
         if not self.selected(generic):
             return
-        for endpoint, kind in [("sampledetails", "sample_detail"), ("samplethinsections", "thin_sections"), ("sampledisplays", "displays")]:
+        sample = self.store.rows("SELECT source_json,has_thin_section,has_display_sample FROM samples WHERE generic=?", (generic,))[0]
+        endpoints = []
+        # A complete baseline comparison found all 2,381 non-empty detail responses
+        # field-for-field identical to their mission inventory rows. Keep details for
+        # pilot/HTML-only discoveries, but do not refetch known full-inventory rows.
+        if self.config["mode"] != "full" or not sample["source_json"]:
+            endpoints.append(("sampledetails", "sample_detail"))
+        # The full baseline also found no related rows behind a false/empty flag.
+        # HTML-only discoveries still get all endpoint checks because they have
+        # not passed through the audited mission inventory.
+        if self.config["mode"] != "full" or not sample["source_json"] or bool(sample["has_thin_section"]):
+            endpoints.append(("samplethinsections", "thin_sections"))
+        if self.config["mode"] != "full" or not sample["source_json"] or bool(sample["has_display_sample"]):
+            endpoints.append(("sampledisplays", "displays"))
+        for endpoint, kind in endpoints:
             self.store.enqueue(API + endpoint + "/" + quote(generic, safe=""), kind, {"generic": generic}, priority=20)
         self.store.enqueue(ORIGIN + "/lunar/samplecatalog/sampleinfo.cfm?sample=" + quote(generic, safe=""), "sample_page", {"generic": generic}, priority=30)
 
@@ -67,6 +81,8 @@ class Pipeline:
             return
         path = parsed.path.lower()
         query = parse_qs(parsed.query)
+        if "/images/" in path and path.endswith("/"):
+            return  # Static asset directories are not HTML content inventories.
         if any(str(value).lower() in {"xcel", "excel", "pdf", "csv", "download"} for value in query.get("type", [])):
             return  # Export endpoints can serve binary assets despite their .cfm extension.
         if not path.startswith("/lunar/"):
@@ -102,7 +118,9 @@ class Pipeline:
             self.store.requirement(url, "Page", "page")
             count = self.store.db.execute("SELECT COUNT(*) FROM requests WHERE kind='page'").fetchone()[0]
             if self.config["mode"] == "full" or count < self.config["page_limit"]:
-                self.store.enqueue(url, "catalog" if url == CATALOG else "page", priority=50)
+                # Acquire the bounded editorial route inventory before the much
+                # larger sample/photo detail fan-out so early snapshots remain useful.
+                self.store.enqueue(url, "catalog" if url == CATALOG else "page", priority=15)
 
     def parse(self, task, response):
         body = (self.store.root / response["body_path"]).read_bytes()
@@ -140,8 +158,13 @@ class Pipeline:
                     self.alternate_inventory(context, row)
             return
         if kind in {"mission_samples", "sample_detail", "alternate_samples"}:
-            if kind == "sample_detail" and (not data or not any(identifier(r.get("GENERIC")) == context["generic"] for r in data)):
-                raise ValueError("Sample-detail response did not contain the requested generic")
+            if kind == "sample_detail" and not data:
+                generic = context["generic"]
+                self.store.issue("source_unavailable", "sample", generic, "The sample-detail API returned an empty array for an inventoried sample", {"response_id": rid}, disposition="source_unavailable")
+                self.store.requirement(response["final_url"], "API sample detail", "sample", mapping=f"samples:{generic}", status="source_unavailable", evidence=rid)
+                return
+            if kind == "sample_detail" and not any(identifier(r.get("GENERIC")) == context["generic"] for r in data):
+                raise ValueError("Sample-detail response contained a different generic")
             for i, row in enumerate(data):
                 generic = identifier(row.get("GENERIC"))
                 if not generic:
@@ -222,10 +245,17 @@ class Pipeline:
         # Different POST searches share a URL but are distinct public content states.
         page_key = url + "#request=" + task["request_id"] if task["method"] == "POST" else url
         fields = html.key_values(soup) if kind in {"sample_page", "photo_page"} else {}
-        if kind == "sample_page" and fields.get("Generic Number") != context["generic"]:
-            raise ValueError("HTML sample identity missing or different from requested sample")
-        if kind == "photo_page" and fields.get("Photo Number") != context["photo_id"]:
-            raise ValueError("HTML photo identity missing or different from requested photo")
+        identities = {"sample_page": ("Generic Number", "sample", "generic"), "photo_page": ("Photo Number", "photo", "photo_id")}
+        if kind in identities:
+            label, entity_type, context_key = identities[kind]
+            expected = context[context_key]
+            actual = fields.get(label)
+            if not actual:
+                self.store.issue("source_unavailable", entity_type, expected, f"The HTML detail route returned a page shell without a {entity_type} record", {"response_id": rid, "url": url}, disposition="source_unavailable")
+                self.store.requirement(url, f"HTML {entity_type} detail", entity_type, mapping=f"{entity_type}s:{expected}", status="source_unavailable", evidence=rid)
+                return
+            if actual != expected:
+                raise ValueError(f"HTML {entity_type} identity differs from requested record")
         self.store.upsert("pages", {"url": page_key, "page_type": kind, "title": html.text(soup.title) or html.text(main.find(["h1", "h2"])), "main_text": html.text(main), "main_html": str(main), "fields_json": json_text(fields), "forms_json": json_text(html.forms(soup, url)), "tables_json": json_text(html.tables(main)), "response_id": rid}, key="url")
         self.store.requirement(page_key, "Page", "page", mapping="pages:" + page_key, status="acquired_unreviewed", evidence=rid)
         for i, block in enumerate(html.blocks(main)):
@@ -276,8 +306,12 @@ class Pipeline:
             params = html.successful_controls(sample_form, {"missionOptions": values.get(mission.casefold(), mission)})
             self.store.enqueue(absolute_url(url, sample_form.get("action")), "sample_results", {"mission": mission, "partition": mission}, params, priority=25)
         if self.config["mode"] == "full":
-            queries = [(m, {"missionOptions": m, "advgeneric": "", "advphoto": ""}) for m in missions]
-            queries.append(("ALL", {"missionOptions": None, "advgeneric": "", "advphoto": ""}))
+            photo_types = [control.get("value") for control in photo_form.select('input[name="photoOptions"][value]')]
+            # Broad mission photo searches timed out after 90 seconds because the
+            # site renders very large result pages. Mission/type partitions cover
+            # the documented photo vocabulary and remain independently auditable.
+            queries = [(f"{mission}/{photo_type}", {"missionOptions": mission, "photoOptions": photo_type, "advgeneric": "", "advphoto": ""}) for mission in missions for photo_type in photo_types]
+            queries.extend((f"ALL/{photo_type}", {"missionOptions": None, "photoOptions": photo_type, "advgeneric": "", "advphoto": ""}) for photo_type in photo_types)
             sample_adv = soup.select_one("form#advsamplesearch")
             if sample_adv:
                 self.store.enqueue(absolute_url(url, sample_adv.get("action")), "sample_results", {"partition": "ALL"}, html.successful_controls(sample_adv, {"missionOptions": None, "generic": ""}), priority=25)
@@ -285,7 +319,7 @@ class Pipeline:
             queries = [(f"sample:{g}", {"advgeneric": g, "advphoto": "", "missionOptions": None}) for g in self.config["samples"]]
         for partition, overrides in queries:
             params = html.successful_controls(photo_form, overrides)
-            self.store.enqueue(absolute_url(url, photo_form.get("action")), "photo_results", {"partition": partition}, params, priority=35)
+            self.store.enqueue(absolute_url(url, photo_form.get("action")), "photo_results", {"partition": partition}, params, priority=12)
 
     def sample_html(self, soup, fields, generic, response):
         rid, url = response["response_id"], response["final_url"]
@@ -418,8 +452,9 @@ class Pipeline:
                 self.schedule_sample(entity_id)
         self.store.observe("inventory", context["partition"], kind + ":distinct_count", len({v for v, _ in found}), rid, "all record links in response")
 
-    def run(self, max_requests=100, retry_failed=False):
-        client = Client(self.store, delay=self.config["delay"], max_requests=max_requests, user_agent=self.config["user_agent"])
+    def run(self, max_requests=100, retry_failed=False, delay=None):
+        effective_delay = self.config["delay"] if delay is None else delay
+        client = Client(self.store, delay=effective_delay, max_requests=max_requests, user_agent=self.config["user_agent"])
         if retry_failed:
             with self.store.db:
                 self.store.db.execute("UPDATE requests SET state='pending',error=NULL WHERE state='failed'")
@@ -442,6 +477,20 @@ class Pipeline:
                 print("Request budget reached; run is resumable.", flush=True)
                 break
             except (FetchError, ValueError, KeyError, TypeError) as exc:
+                if task["kind"] == "alternate_samples" and str(exc).startswith("not_found: HTTP 404"):
+                    with self.store.db:
+                        self.store.db.execute("UPDATE requests SET state='parsed',outcome='source_unavailable',error=NULL WHERE request_id=?", (task["request_id"],))
+                        self.store.issue("source_unavailable", "request", task["request_id"], "NASA returned HTTP 404 for a documented alternate inventory value", {"url": task["url"]}, disposition="source_unavailable")
+                    failures = 0
+                    print(f"SOURCE UNAVAILABLE {task['url']}: {exc}", flush=True)
+                    continue
+                if task["kind"] == "page" and "/images/" in urlsplit(task["url"]).path.lower() and str(exc).startswith("http_error: HTTP 403"):
+                    with self.store.db:
+                        self.store.db.execute("UPDATE requests SET state='parsed',outcome='source_unavailable',error=NULL WHERE request_id=?", (task["request_id"],))
+                        self.store.issue("source_unavailable", "request", task["request_id"], "A linked static-asset directory is not browseable as an HTML page", {"url": task["url"]}, disposition="source_unavailable")
+                    failures = 0
+                    print(f"SKIPPED ASSET DIRECTORY {task['url']}: {exc}", flush=True)
+                    continue
                 with self.store.db:
                     self.store.db.execute("UPDATE requests SET state='failed',outcome='error',error=? WHERE request_id=?", (str(exc), task["request_id"]))
                     self.store.issue("acquisition_error", "request", task["request_id"], str(exc), {"url": task["url"]}, severity="error")
@@ -452,7 +501,7 @@ class Pipeline:
                     break
         states = {r["state"]: r["n"] for r in self.store.rows("SELECT state,COUNT(*) n FROM requests GROUP BY state")}
         state = "paused" if states.get("pending") or states.get("fetched") else "acquisition_errors" if states.get("failed") else "acquisition_finished_needs_review"
-        write_json(self.store.root / "progress.json", {"updated_at": utcnow(), "status": state, "requests": states, "http_requests_this_invocation": client.count, "parser_version": __version__, "content_parity": "not_verified"})
+        write_json(self.store.root / "progress.json", {"updated_at": utcnow(), "status": state, "requests": states, "http_requests_this_invocation": client.count, "request_delay_seconds": effective_delay, "parser_version": __version__, "content_parity": "not_verified"})
         return state
 
     def reparse(self):

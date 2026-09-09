@@ -2,31 +2,31 @@
 
 Run: `full-2026-09-08`. Started September 8, 2026 at 18:55 EDT (22:55 UTC).
 
-**Status at this handoff: running in the background; acquisition is not complete.** This is a new full-mode baseline, separate from `pilot-2026-09-08`. The first live checkpoint processed all nine mission inventories and retained 2,511 samples, with more than 10,000 requests already queued and no failed requests at that checkpoint. These are preliminary counts: photo searches, alternate inventories and linked pages can expand the queue substantially.
+**Status after assessment: a background resume is running; acquisition is not complete.** The initial invocation parsed 8,122 requests before three consecutive source records without separate detail representations triggered a protective pause. Cached responses were reparsed with corrected terminal-source handling, and the app now uses an immutable full-run checkpoint. See the [data assessment](full-data-assessment.md) for counts, request-reduction evidence, and open investigations.
 
-The scan has no invocation request cap and no pilot sample/photo/page caps. It uses one request at a time, with at least one second between request starts, and preserves responses and queue state for resume. The initial queue alone implies roughly three hours of request pacing; parsing, server latency, photos, bibliography associations and further discovery add time. Keep the computer awake and connected until the process finishes.
+The resumed scan has no invocation request cap and no pilot sample/photo/page caps. It remains sequential, now with 0.25 seconds between request starts based on the completed baseline audit, and preserves responses and queue state. Server latency, large HTML parsing, retries, and further discovery add to the request-pacing estimate. Keep the computer awake and connected until the process finishes.
 
 The scope is all metadata and page content discoverable by the current extractor: mission and alternate API inventories; every discovered sample's details, thin sections, displays and HTML; sample and independent photo searches; photo details; independent bibliography and sample associations; and linked informational HTML. Images, PDFs, TIFFs and other media remain remote URLs with their placement and captions, per the [agreed scope](lunar-data-extraction-plan.md). A finished crawl still needs inventory-exhaustion and content review before it can be described as all current-site content.
 
 ### Early findings requiring follow-up
 
-A later startup checkpoint reached 123 parsed requests, 10,170 pending requests and two failures. Both failures were NASA HTTP 404 responses for alternate soil-subtype inventories:
+NASA returned HTTP 404 for two alternate soil-subtype inventories:
 
 - `/rest/lunarapi/samples/samplesbysubtype/Soil?subtype=%3C1%20mm` (`<1 mm`).
 - `/rest/lunarapi/samples/samplesbysubtype/Soil?subtype=%3E10%20mm` (`>10 mm`).
 
-The saved responses contain the server's file-or-directory-not-found page. The scan continued to other partitions; these failures did not remove any samples from the mission inventory. Determine whether another supported inventory covers the affected records and retain the unavailable-partition evidence. Their completeness is unresolved, and they must not be relabeled as successful empty searches. Unless addressed after acquisition, these failures will cause the supervisor to finish as `needs_attention` and validation to report errors, while still exporting a review candidate.
+The saved responses contain the server's file-or-directory-not-found page. They are classified as source-unavailable partitions rather than extraction errors and did not remove any samples from the mission inventory. The 130 empty API details, 19 empty HTML detail shells, broad photo-search timeout, request redundancy, and other findings are covered in the [full assessment](full-data-assessment.md).
 
 ## Running process and artifacts
 
-The hidden PowerShell supervisor started with PID `71988`; that PID is only an initial diagnostic, since PIDs can be reused. It runs [scripts/run-full-scan.ps1](../scripts/run-full-scan.ps1), which acquires data, validates it, and exports a candidate dataset. It preserves a protective pause or acquisition failure as `needs_attention` instead of calling the scan complete. It does not automatically retry failed requests or override server denial/backoff stops.
+The hidden PowerShell supervisor runs [scripts/run-full-scan.ps1](../scripts/run-full-scan.ps1), which resumes acquisition, validates it, and exports a candidate dataset. With `-PrepareApp`, it promotes and restarts the local container only when the queue finishes and validation has zero unresolved errors. A protective pause remains `needs_attention`; server denial/backoff protections are not overridden.
 
 All commands below run from the repository root:
 
 ```powershell
 # Live request log and errors; safe while acquisition is active.
-Get-Content data/scan-logs/full-2026-09-08.stdout.log -Tail 20
-Get-Content data/scan-logs/full-2026-09-08.stderr.log -Tail 20
+Get-Content data/scan-logs/full-2026-09-08-resume.stdout.log -Tail 30 -Wait
+Get-Content data/scan-logs/full-2026-09-08-resume.stderr.log -Tail 20
 Get-Content data/scan-logs/full-2026-09-08.status.json
 
 # Current persisted queue counts.
@@ -49,10 +49,10 @@ Run data and logs are ignored by Git. Preserve a backup of the completed run, in
 If interrupted, first confirm the old supervisor and ingestion process have exited. Then resume with automatic validation/export:
 
 ```powershell
-powershell -NoProfile -File scripts/run-full-scan.ps1 -RunName full-2026-09-08 -Resume
+powershell -NoProfile -File scripts/run-full-scan.ps1 -RunName full-2026-09-08 -Resume -PrepareApp -Delay 0.25
 ```
 
-Do not run a second acquisition, reparse, validation or export writer against the active run. Inspect failed requests before using `resume --retry-failed`; repeat server denial or a requested pause requires attention, not a retry loop. After a parser fix, reparse cached responses offline, then resume any newly discovered requests. Keep human review decisions outside generated tables because reparse resets those tables.
+Do not run a second acquisition, reparse, validation or export writer against the active run. The supervisor retries failed requests once so corrected parsers can consume cached successful responses and known terminal HTTP outcomes can be reclassified. Repeat server denial or a requested pause still requires attention, not a retry loop. Keep human review decisions outside generated tables because reparse resets those tables.
 
 ## What to do next, in order
 
@@ -64,10 +64,10 @@ Do not run a second acquisition, reparse, validation or export writer against th
 
 4. **Freeze a reviewed candidate and document full results.** Replace this preliminary checkpoint with final counts, acquisition dates, errors/dispositions, gaps and review findings. Confirm SQLite integrity and foreign keys, raw-response hashes, and CSV/SQLite entity and relationship parity. Regenerate the export manifest after fixes. Retain API/search membership differences as legacy search bugs for the separate original-source audit; the pilot found 192 differences, but the full-run total must be measured. Keep source numeric anomalies with evidence. Do not label the dataset complete while required content remains missing.
 
-5. **Define the React data and route contracts.** Map each row of `content-parity.csv` to a destination route and renderable model. Measure final entity counts and export sizes before choosing build-generated JSON/search indexes or a small read-only SQLite service. Specify sample search/filter fields, sample/photo relationships, thin-section availability, display locations, bibliography, publication links and editorial tables. Sanitize imported HTML and rewrite internal links through the presentation adapter. Keep the frontend contract independent of raw NASA field casing and audit tables.
+5. **Reconcile the existing React data and route contracts.** Map each row of `content-parity.csv` to an implemented destination route and renderable model. The read-only SQLite service and presentation adapter already exist; extend them for newly acquired structures, benchmark final volume, and keep the browser contract independent of raw NASA field casing and audit tables.
 
-6. **Build and verify the replacement website.** Create the root React project with source in `/src`, then implement mission browsing, sample search/detail, photo search/detail, publications and informational routes. Search the retained record union. Verify sample-to-photo and photo-to-sample navigation, complete galleries, remote images/documents, request/return guidance, keyboard access and responsive layouts. Use the [hosting setup](hosting.md) and review publication separately. Recheck changed source content near launch; mark parity only after the required user journeys and content inventory pass.
+6. **Verify the replacement website with the completed candidate.** Repeat mission browsing, sample/photo search and details, publications, informational routes, cross-navigation, complete galleries, remote assets, keyboard access, and responsive layouts. Use the [hosting setup](hosting.md) and review publication separately. Recheck changed source content near launch; mark parity only after the required user journeys and content inventory pass.
 
 ## Verification before launch of this scan
 
-The existing acquisition suite passed: **24 tests**, using `uv run --project python --locked --extra test pytest python/tests -q`. Live startup verified successful NASA responses, all nine mission inventories, a persisted full-mode run configuration, continued queue progress and an empty error log at the initial checkpoint. Full-run validation, exports and content parity remain pending until the scan and review finish.
+The acquisition suite now passes **26 tests**; the app passes **15 tests**, plus TypeScript and lint checks. The full-run checkpoint passed SQLite integrity, foreign-key validation, snapshot preparation, container health, and representative API checks. Its reports and export are generated, but final acquisition and content-parity review remain pending.

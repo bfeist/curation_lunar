@@ -3,7 +3,7 @@ import json
 import pytest
 
 from lunar_ingest import html
-from lunar_ingest.common import asset_kind, identifier
+from lunar_ingest.common import asset_kind, digest, identifier
 from lunar_ingest.reports import export, file_hash, validate
 from conftest import FIXTURES, ingest_fixture
 
@@ -141,9 +141,53 @@ def test_full_mode_schedules_independent_inventories(setup_pipeline):
     ingest_fixture(store, pipeline, "missions", "missions")
     ingest_fixture(store, pipeline, "catalog", "catalog")
     tasks = store.rows("SELECT context_json FROM requests WHERE kind='photo_results'")
-    assert {json.loads(r["context_json"])["partition"] for r in tasks} == {"ALL", "Apollo 11", "Apollo 12", "Apollo 14", "Apollo 15", "Apollo 16", "Apollo 17", "Luna 16", "Luna 20", "Luna 24"}
+    partitions = {json.loads(r["context_json"])["partition"] for r in tasks}
+    assert len(partitions) == 40
+    assert {"Apollo 11/ortho", "Apollo 17/thin section", "Luna 24/processing", "ALL/stereo"} <= partitions
     pipeline.alternate_inventory({"endpoint": "listsampleclassification"}, {"SAMPLETYPE": "Soil", "SAMPLESUBTYPE": "<1 mm"})
     assert store.rows("SELECT url FROM requests WHERE kind='alternate_samples'")
+
+
+def test_full_mode_uses_audited_inventory_fields_to_avoid_redundant_api_calls(setup_pipeline):
+    store, pipeline, config = setup_pipeline
+    config["mode"] = "full"
+    ingest_fixture(store, pipeline, "api_apollo11", "mission_samples", {"mission": "Apollo 11"})
+    assert not store.rows("SELECT * FROM requests WHERE kind='sample_detail'")
+    thin_expected = {r["generic"] for r in store.rows("SELECT generic FROM samples WHERE has_thin_section=1")}
+    thin_actual = {json.loads(r["context_json"])["generic"] for r in store.rows("SELECT context_json FROM requests WHERE kind='thin_sections'")}
+    display_expected = {r["generic"] for r in store.rows("SELECT generic FROM samples WHERE has_display_sample=1")}
+    display_actual = {json.loads(r["context_json"])["generic"] for r in store.rows("SELECT context_json FROM requests WHERE kind='displays'")}
+    assert thin_actual == thin_expected
+    assert display_actual == display_expected
+    sample = store.rows("SELECT generic FROM samples WHERE has_thin_section=0 AND has_display_sample IS NULL LIMIT 1")[0]["generic"]
+    with store.db:
+        store.db.execute("UPDATE samples SET has_thin_section=1,has_display_sample=1 WHERE generic=?", (sample,))
+        pipeline.schedule_sample(sample)
+    assert store.rows("SELECT * FROM requests WHERE kind='thin_sections'")
+    assert store.rows("SELECT * FROM requests WHERE kind='displays'")
+
+
+def test_empty_detail_sources_are_terminal_findings(setup_pipeline):
+    store, pipeline, _ = setup_pipeline
+    cases = [
+        ("sample_detail", {"generic": "14012"}, b"[]", "application/json"),
+        ("sample_page", {"generic": "14012"}, b"<html><title>Apollo Sample Description</title><body><p>No record</p></body></html>", "text/html"),
+        ("photo_page", {"photo_id": "MISSING"}, b"<html><title>Photo</title><body><p>No record</p></body></html>", "text/html"),
+    ]
+    for ordinal, (kind, context, body, content_type) in enumerate(cases):
+        with store.db:
+            request_id = store.enqueue(f"https://curator.jsc.nasa.gov/test/{ordinal}", kind, context)
+            response_id = digest([kind, context])
+            relative = f"raw/unavailable-{ordinal}"
+            (store.root / relative).parent.mkdir(exist_ok=True)
+            (store.root / relative).write_bytes(body)
+            store.upsert("responses", {"response_id": response_id, "request_id": request_id, "fetched_at": "2026-09-09T00:00:00+00:00", "final_url": f"https://curator.jsc.nasa.gov/test/{ordinal}", "status": 200, "body_path": relative, "sha256": digest(body), "outcome": "success", "content_type": content_type}, key="response_id")
+            task = store.rows("SELECT * FROM requests WHERE request_id=?", (request_id,))[0]
+            response = store.rows("SELECT * FROM responses WHERE response_id=?", (response_id,))[0]
+            pipeline.parse(task, response)
+    findings = store.rows("SELECT entity_type,entity_id FROM validation_issues WHERE category='source_unavailable'")
+    assert {(r["entity_type"], r["entity_id"]) for r in findings} == {("sample", "14012"), ("photo", "MISSING")}
+    assert not store.rows("SELECT * FROM pages")
 
 
 def test_bibliography_search_keeps_citations_and_popup_relationships(setup_pipeline):

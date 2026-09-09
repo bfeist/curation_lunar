@@ -1,0 +1,10 @@
+CREATE INDEX IF NOT EXISTS samples_search ON samples(mission, sample_type, sample_subtype);
+CREATE INDEX IF NOT EXISTS photos_search ON photos(mission_raw, photo_type, photo_subtype, film_type);
+CREATE INDEX IF NOT EXISTS pages_type ON pages(page_type);
+CREATE INDEX IF NOT EXISTS thin_sections_generic ON thin_sections(generic, specific);
+CREATE INDEX IF NOT EXISTS sample_displays_generic ON sample_displays(generic, location_id);
+CREATE INDEX IF NOT EXISTS sample_photos_generic ON sample_photos(generic, photo_id);
+CREATE INDEX IF NOT EXISTS sample_photos_photo ON sample_photos(photo_id, generic);
+CREATE INDEX IF NOT EXISTS sample_publications_generic ON sample_publications(generic, publication_id);
+CREATE INDEX IF NOT EXISTS sample_references_generic ON sample_references(generic, reference_id);
+CREATE INDEX IF NOT EXISTS asset_occurrences_page ON asset_occurrences(page_url, role, ordinal);

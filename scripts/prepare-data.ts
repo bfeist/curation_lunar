@@ -7,7 +7,7 @@ import { existsSync } from "node:fs";
 const root = resolve(import.meta.dirname, "..");
 const source = resolve(
   process.argv[2] ??
-    resolve(root, "data/runs/pilot-2026-09-08/exports/lunar.sqlite"),
+    resolve(root, "data/runs/full-2026-09-08/exports/lunar.sqlite"),
 );
 // Export files are deliberate candidates. Never open the active acquisition database here.
 if (basename(dirname(source)) !== "exports")
@@ -26,6 +26,14 @@ try {
   await backup(db, temporary);
 } finally {
   db.close();
+}
+// The source uses WAL while it is being built. A website snapshot lives on a
+// read-only mount, so convert the independent copy to a self-contained file.
+const snapshot = new DatabaseSync(temporary);
+try {
+  snapshot.prepare("PRAGMA journal_mode=DELETE").get();
+} finally {
+  snapshot.close();
 }
 const hash = createHash("sha256")
   .update(await readFile(temporary))

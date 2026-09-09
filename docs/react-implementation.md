@@ -4,7 +4,7 @@ Implemented September 8, 2026. This supersedes the earlier plan's instruction to
 
 ## Scope and data
 
-The React app runs at **http://localhost:3003**, with a read-only Node/SQLite service at `src/server/server.ts`. Structure and tooling follow `../airt2`. The local website uses a consistent copy of the completed pilot export, not the active full scan. Its 2,511 sample records cover all nine mission inventories; detailed enrichment remains limited to the pilot. The prepared SQLite copy is about 32.7 MB.
+The React app runs at **http://localhost:3003**, with a read-only Node/SQLite service at `src/server/server.ts`. Structure and tooling follow `../airt2`. The local website now uses an immutable export of the resumable full-run checkpoint, not the active working database. The September 9 checkpoint has 2,511 samples, 19,769 discovered photo IDs, 59 locally mapped editorial routes, and a prepared SQLite copy of about 299 MB. Detailed sample/photo enrichment is incomplete and the footer labels the snapshot as a continuing acquisition checkpoint. See [the full-run data assessment](full-data-assessment.md).
 
 | Journey | First implementation |
 | --- | --- |
@@ -41,7 +41,7 @@ Intentional differences: the header search searches the local catalog instead of
 
 ## Remaining acceptance work
 
-This is a working first implementation, not a declaration that the full website/data parity milestone is complete. Finish the acquisition/review steps in [full-scan-and-next-steps.md](full-scan-and-next-steps.md), then prepare a reviewed full snapshot and repeat representative journeys. Newsletter issue bodies and some linked catalog volumes are absent from the pilot and currently open on NASA. Rich legacy embedded maps/widgets are not recreated; captured display listings and source links remain accessible. Gallery list/table view toggles are not reproduced. Remote asset availability still depends on NASA/source hosts.
+This is a working first implementation, not a declaration that the full website/data parity milestone is complete. Finish the acquisition/review steps in [full-scan-and-next-steps.md](full-scan-and-next-steps.md), then prepare a reviewed full snapshot and repeat representative journeys. The full checkpoint adds newsletter and core-photo routes that still need route-by-route adapter review; some linked catalog volumes remain on NASA. Rich legacy embedded maps/widgets are not recreated; captured display listings and source links remain accessible. Gallery list/table view toggles are not reproduced. Remote asset availability still depends on NASA/source hosts.
 
 Reconcile every section in the final `content-parity.csv`, audit full-dataset relationship coverage and query performance, and extend the editorial adapter where new content structures need it. Visual checking so far is representative; every informational route has been checked for rendering, but not individually certified for visual parity.
 

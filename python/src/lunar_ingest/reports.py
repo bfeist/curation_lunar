@@ -89,6 +89,8 @@ def validate(store, config):
                 store.issue("raw_integrity", "response", response["response_id"], "Raw evidence missing or hash mismatch", response, severity="error")
         # A recovered request no longer counts as an unresolved acquisition error.
         store.db.execute("UPDATE validation_issues SET disposition='resolved' WHERE category='acquisition_error' AND entity_id IN (SELECT request_id FROM requests WHERE state='parsed')")
+        for request in store.rows("SELECT request_id,url FROM requests WHERE outcome='source_unavailable'"):
+            store.issue("source_unavailable", "request", request["request_id"], "NASA returned no public response for this discovered target", {"url": request["url"]}, disposition="source_unavailable")
 
     tables = [r["name"] for r in store.rows("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name")]
     totals = {t: store.db.execute(f'SELECT COUNT(*) FROM "{t}"').fetchone()[0] for t in tables}
