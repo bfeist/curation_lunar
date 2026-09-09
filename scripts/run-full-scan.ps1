@@ -10,9 +10,10 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path $PSScriptRoot -Parent
+$dataRoot = Join-Path (Split-Path $repoRoot -Parent) 'curation_lunar_data'
 Set-Location -LiteralPath $repoRoot
-$runRoot = Join-Path $repoRoot "data/runs/$RunName"
-$monitorRoot = Join-Path $repoRoot 'data/scan-logs'
+$runRoot = Join-Path $dataRoot "runs/$RunName"
+$monitorRoot = Join-Path $dataRoot 'scan-logs'
 New-Item -ItemType Directory -Force -Path $monitorRoot | Out-Null
 $statusPath = Join-Path $monitorRoot "$RunName.status.json"
 $startedAt = (Get-Date).ToUniversalTime().ToString('o')

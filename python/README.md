@@ -29,7 +29,7 @@ Customize the pilot with `--samples`, `--photo-limit`, and `--page-limit`. Run d
 
 ```powershell
 uv run --project python --locked lunar-ingest start --mode full --run full-example --max-requests 500
-uv run --project python --locked lunar-ingest resume data/runs/full-example --max-requests 500
+uv run --project python --locked lunar-ingest resume ../curation_lunar_data/runs/full-example --max-requests 500
 ```
 
 Full mode removes pilot entity/page limits. It enumerates missions, lookup/filter endpoints, website sample searches, mission-wide and unfiltered photo searches, and the independent bibliography search; follows discovered sample/photo details, bibliography association popups and linked lunar HTML pages; and preserves editorial text, tables, forms, references, galleries and asset placements.
@@ -53,12 +53,12 @@ The crawler follows observed links and captures forms but only automatically sub
 ## Resume, inspect, rebuild, export
 
 ```powershell
-uv run --project python --locked lunar-ingest status data/runs/pilot-example
-uv run --project python --locked lunar-ingest resume data/runs/pilot-example --max-requests 120
-uv run --project python --locked lunar-ingest resume data/runs/pilot-example --retry-failed --max-requests 120
-uv run --project python --locked lunar-ingest parse data/runs/pilot-example
-uv run --project python --locked lunar-ingest validate data/runs/pilot-example
-uv run --project python --locked lunar-ingest export data/runs/pilot-example
+uv run --project python --locked lunar-ingest status ../curation_lunar_data/runs/pilot-example
+uv run --project python --locked lunar-ingest resume ../curation_lunar_data/runs/pilot-example --max-requests 120
+uv run --project python --locked lunar-ingest resume ../curation_lunar_data/runs/pilot-example --retry-failed --max-requests 120
+uv run --project python --locked lunar-ingest parse ../curation_lunar_data/runs/pilot-example
+uv run --project python --locked lunar-ingest validate ../curation_lunar_data/runs/pilot-example
+uv run --project python --locked lunar-ingest export ../curation_lunar_data/runs/pilot-example
 ```
 
 `parse` rebuilds derived tables from saved responses without network access. It may discover new pending requests after parser changes; inspect and resume explicitly. It resets generated review/disposition rows, so keep human review decisions outside those generated tables for now.
@@ -68,7 +68,7 @@ uv run --project python --locked lunar-ingest export data/runs/pilot-example
 ## Outputs
 
 ```text
-data/runs/<run>/
+../curation_lunar_data/runs/<run>/
   run.json                       # scope, model version and configuration hash
   progress.json                  # last acquisition/reparse queue state
   lunar.sqlite                   # working dataset, request queue and provenance
@@ -88,7 +88,7 @@ data/runs/<run>/
     manifest.json                # configuration, schema versions, hashes and limits
 ```
 
-Use `--data-dir` at `start` to change the default `data/runs` location. Do not run two writers against the same run directory. Run histories and bulk data are ignored by Git; the small test fixtures and their source manifest are committed project inputs.
+Use `--data-dir` at `start` to override the default sibling `../curation_lunar_data/runs` location. Do not run two writers against the same run directory. Run histories and bulk data live outside the source repository; the small test fixtures and their source manifest are committed project inputs.
 
 CSV null is `\N`; a literal backslash is doubled. Check the null token before unescaping values. Import identifier columns as text. CSVs are literal source-data exports, not spreadsheet-formula-safe presentation files. Raw API tokens remain available when exact decimal spelling matters.
 

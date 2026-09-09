@@ -8,7 +8,8 @@ from .pipeline import Pipeline
 from .reports import export, validate
 from .storage import Store, read_config, write_json
 
-DEFAULT_DATA = Path(__file__).resolve().parents[3] / "data" / "runs"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_DATA = REPO_ROOT.parent / "curation_lunar_data" / "runs"
 
 
 def main(argv=None):

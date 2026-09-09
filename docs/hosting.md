@@ -44,7 +44,7 @@ npm run data:prepare
 npm run dev
 ```
 
-`data:prepare` defaults to the latest **full-run export**, `data/runs/full-2026-09-08/exports/lunar.sqlite`. It opens that export read-only, checks integrity and foreign keys, uses SQLite's backup API to make a consistent snapshot, converts the independent copy from WAL to `DELETE` journal mode for a self-contained read-only mount, hashes it, and writes `.local/data/dataset.json` pointing to the versioned `.sqlite` file. It never connects to the active full scan. The Python extractor, its environment, and its working database remain separate. Until review finishes, use a label that says the snapshot is a checkpoint or candidate.
+`data:prepare` defaults to the latest **full-run export**, `../curation_lunar_data/runs/full-2026-09-08/exports/lunar.sqlite`. It opens that export read-only, checks integrity and foreign keys, uses SQLite's backup API to make a consistent snapshot, converts the independent copy from WAL to `DELETE` journal mode for a self-contained read-only mount, hashes it, and writes `.local/data/dataset.json` pointing to the versioned `.sqlite` file. It never connects to the active full scan. The Python extractor, its environment, and its working database remain separate. Until review finishes, use a label that says the snapshot is a checkpoint or candidate.
 
 `src/server/server.ts` is the entry point for development and production. Development mounts Vite as middleware in the same HTTP process, so the browser uses one origin and one port. React source lives under `src/components`, `src/pages`, `src/api`, `src/data`, `src/styles`, and `src/types`. Vite emits `.local/dist/`.
 
@@ -64,7 +64,7 @@ Stop the development process first because both commands default to port 3003. `
 Wait for the full scan's acquisition/export process and the content review described in [full-scan-and-next-steps.md](full-scan-and-next-steps.md). A finished crawl alone is not acceptance.
 
 ```powershell
-npm run data:prepare -- data/runs/full-2026-09-08/exports/lunar.sqlite "Reviewed full dataset - 2026-09-08"
+npm run data:prepare -- ../curation_lunar_data/runs/full-2026-09-08/exports/lunar.sqlite "Reviewed full dataset - 2026-09-08"
 ```
 
 Use that label only after review. The script requires an `exports/` candidate, not a working run database. It creates a new versioned snapshot, then atomically replaces the small manifest. Restart the website to switch datasets. A running process keeps its previous SQLite connection. Retain earlier files/manifests for rollback; the script does not delete previous snapshots. Generated data is ignored by Git.

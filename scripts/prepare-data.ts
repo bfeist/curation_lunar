@@ -14,7 +14,10 @@ async function hashFile(path: string) {
 const root = resolve(import.meta.dirname, "..");
 const source = resolve(
   process.argv[2] ??
-    resolve(root, "data/runs/full-2026-09-08/exports/lunar.sqlite"),
+    resolve(
+      root,
+      "../curation_lunar_data/runs/full-2026-09-08/exports/lunar.sqlite",
+    ),
 );
 // Export files are deliberate candidates. Never open the active acquisition database here.
 if (basename(dirname(source)) !== "exports")

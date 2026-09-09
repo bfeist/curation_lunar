@@ -125,15 +125,23 @@
 }
 .new-site .n-circle {
   border-radius: 50%;
-  background: var(--n-red);
-  color: white;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  font-size: 25px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
+}
+.new-site .n-circle svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.new-site .n-circle circle {
+  fill: #f64137;
+}
+.new-site .n-circle path {
+  fill: #fff;
 }
 .new-site .n-header {
   background: #080808;
@@ -309,7 +317,7 @@
 .new-site .n-hero-link {
   display: inline-flex;
   align-items: center;
-  gap: 20px;
+  gap: 9px;
   color: #fff;
   font-weight: 700;
   font-size: 18px;
@@ -1312,7 +1320,6 @@
   }
   .new-site .n-hero-link {
     font-size: 15px;
-    gap: 15px;
   }
   .new-site .n-image-credit {
     left: 22px;

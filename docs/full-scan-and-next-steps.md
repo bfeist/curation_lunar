@@ -25,24 +25,24 @@ All commands below run from the repository root:
 
 ```powershell
 # Live request log and errors; safe while acquisition is active.
-Get-Content data/scan-logs/full-2026-09-08-resume.stdout.log -Tail 30 -Wait
-Get-Content data/scan-logs/full-2026-09-08-resume.stderr.log -Tail 20
-Get-Content data/scan-logs/full-2026-09-08.status.json
+Get-Content ../curation_lunar_data/scan-logs/full-2026-09-08-resume.stdout.log -Tail 30 -Wait
+Get-Content ../curation_lunar_data/scan-logs/full-2026-09-08-resume.stderr.log -Tail 20
+Get-Content ../curation_lunar_data/scan-logs/full-2026-09-08.status.json
 
 # Current persisted queue counts.
-uv run --project python --locked lunar-ingest status data/runs/full-2026-09-08
+uv run --project python --locked lunar-ingest status ../curation_lunar_data/runs/full-2026-09-08
 ```
 
 The supervisor status identifies its stage (`acquiring`, `validating`, `exporting`, `acquisition_finished_needs_review`, `needs_attention`, or `failed`). Its timestamps mark stage transitions, not a heartbeat. The request log and queue are the live progress sources; `progress.json` and coverage reports update when the acquisition invocation ends. A terminated process can leave stale status, so verify process activity and log movement if progress appears stuck.
 
 | Location | Purpose |
 | --- | --- |
-| `data/runs/full-2026-09-08/run.json` | Scope, creation timestamp and parser/configuration fingerprints |
-| `data/runs/full-2026-09-08/lunar.sqlite` | Working database and durable request queue |
-| `data/runs/full-2026-09-08/raw/` | Immutable source JSON/HTML/text evidence |
-| `data/scan-logs/full-2026-09-08.*` | Supervisor state, standard output and error logs |
-| `data/runs/full-2026-09-08/reports/` | Coverage, validation, source differences and content inventory after acquisition stops |
-| `data/runs/full-2026-09-08/exports/` | Candidate SQLite, per-table CSVs, dictionary and hash manifest after validation/export |
+| `../curation_lunar_data/runs/full-2026-09-08/run.json` | Scope, creation timestamp and parser/configuration fingerprints |
+| `../curation_lunar_data/runs/full-2026-09-08/lunar.sqlite` | Working database and durable request queue |
+| `../curation_lunar_data/runs/full-2026-09-08/raw/` | Immutable source JSON/HTML/text evidence |
+| `../curation_lunar_data/scan-logs/full-2026-09-08.*` | Supervisor state, standard output and error logs |
+| `../curation_lunar_data/runs/full-2026-09-08/reports/` | Coverage, validation, source differences and content inventory after acquisition stops |
+| `../curation_lunar_data/runs/full-2026-09-08/exports/` | Candidate SQLite, per-table CSVs, dictionary and hash manifest after validation/export |
 
 Run data and logs are ignored by Git. Preserve a backup of the completed run, including raw evidence, before treating it as the reconstruction baseline.
 

@@ -340,17 +340,15 @@ Conceptual layout. The implemented Python package and actual command names are d
     migrations/
     tests/fixtures/
     tests/
-  data/                               # generated; normally excluded from Git
-    raw/<run_id>/
-    staging/
-    releases/<run_id>/
-      lunar.sqlite
-      csv/
-      reports/
-      manifest.json
   src/                                # future React application
   public/                             # future frontend public files
   package.json                        # future frontend tooling at root
+../curation_lunar_data/               # generated data outside the source repository
+  runs/<run_id>/
+    raw/
+    exports/
+    reports/
+  scan-logs/
 ```
 
 Keep database builds and complete raw crawls out of ordinary source control. Commit small representative fixtures, migrations, the data dictionary and summary reports. Configure all output paths so the Python package works when invoked from the repository root or `/python`.
@@ -359,10 +357,10 @@ Implemented CLI examples, run from the repository root:
 
 ```text
 uv run --project python --locked lunar-ingest start --mode pilot --run <id>
-uv run --project python --locked lunar-ingest resume data/runs/<id>
-uv run --project python --locked lunar-ingest parse data/runs/<id>
-uv run --project python --locked lunar-ingest validate data/runs/<id>
-uv run --project python --locked lunar-ingest export data/runs/<id>
+uv run --project python --locked lunar-ingest resume ../curation_lunar_data/runs/<id>
+uv run --project python --locked lunar-ingest parse ../curation_lunar_data/runs/<id>
+uv run --project python --locked lunar-ingest validate ../curation_lunar_data/runs/<id>
+uv run --project python --locked lunar-ingest export ../curation_lunar_data/runs/<id>
 ```
 
 ## 9. Milestones and later React work

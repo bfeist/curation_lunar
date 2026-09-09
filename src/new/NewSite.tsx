@@ -11,6 +11,15 @@ import { Catalog, PhotoCatalog, References } from "./catalog";
 import { SampleView, PhotoView, ContentPage } from "./detail";
 import "./new.css";
 
+function NasaCircleArrow() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" focusable="false">
+      <circle cx="16" cy="16" r="16" />
+      <path d="M8 16.956h12.604l-3.844 4.106 1.252 1.338L24 16l-5.988-6.4-1.252 1.338 3.844 4.106H8v1.912z" />
+    </svg>
+  );
+}
+
 function Footer() {
   return (
     <footer className="n-footer">
@@ -91,7 +100,7 @@ function Home() {
           <Link className="n-hero-link" to="/new/catalog">
             Explore the sample catalog{" "}
             <span className="n-circle" aria-hidden="true">
-              →
+              <NasaCircleArrow />
             </span>
           </Link>
           <span className="n-image-credit">
@@ -171,7 +180,7 @@ function Home() {
             <Link className="n-text-link" to="/new/samples/64435">
               Explore sample 64435{" "}
               <span className="n-circle" aria-hidden="true">
-                →
+                <NasaCircleArrow />
               </span>
             </Link>
           </div>

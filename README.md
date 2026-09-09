@@ -22,7 +22,7 @@ The full run is resumable and must not be restarted. To continue it at the audit
 powershell -NoProfile -File scripts/run-full-scan.ps1 -RunName full-2026-09-08 -Resume -PrepareApp -Delay 0.25
 ```
 
-When it runs in the background, follow it with `Get-Content data/scan-logs/full-2026-09-08-resume.stdout.log -Tail 30 -Wait`. Pressing `Ctrl+C` stops only the viewer. See the [full-run assessment](docs/full-data-assessment.md) before treating the resulting candidate as complete.
+When it runs in the background, follow it with `Get-Content ../curation_lunar_data/scan-logs/full-2026-09-08-resume.stdout.log -Tail 30 -Wait`. Pressing `Ctrl+C` stops only the viewer. See the [full-run assessment](docs/full-data-assessment.md) before treating the resulting candidate as complete.
 
 For the containerized demo, prepare the snapshot once, then run `npm run docker:up` (or `docker compose -f dockercompose.yml up --build -d --wait`). Open **http://localhost:3005**. Docker builds the frontend and runs the whole app with Node. Demo page routes use `.NOTcfm`; old `.cfm` URLs are not supported.
 

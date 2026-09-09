@@ -37,12 +37,12 @@ Twenty sample numeric outliers are preserved as source values. The newsletter in
 
 ## Artifacts
 
-- [Coverage report](../data/runs/pilot-2026-09-08/reports/coverage.md)
-- [Content inventory](../data/runs/pilot-2026-09-08/reports/content-parity.csv)
-- [Content gaps](../data/runs/pilot-2026-09-08/reports/content-gaps.md)
-- [Search discrepancies](../data/runs/pilot-2026-09-08/reports/source-differences.csv)
-- [SQLite export](../data/runs/pilot-2026-09-08/exports/lunar.sqlite)
-- [Export manifest](../data/runs/pilot-2026-09-08/exports/manifest.json)
+- Coverage report: `../../curation_lunar_data/runs/pilot-2026-09-08/reports/coverage.md`
+- Content inventory: `../../curation_lunar_data/runs/pilot-2026-09-08/reports/content-parity.csv`
+- Content gaps: `../../curation_lunar_data/runs/pilot-2026-09-08/reports/content-gaps.md`
+- Search discrepancies: `../../curation_lunar_data/runs/pilot-2026-09-08/reports/source-differences.csv`
+- SQLite export: `../../curation_lunar_data/runs/pilot-2026-09-08/exports/lunar.sqlite`
+- Export manifest: `../../curation_lunar_data/runs/pilot-2026-09-08/exports/manifest.json`
 
 Generated run data is local and ignored by Git; these relative links work while the run directory is present. The small source fixtures and the extraction code remain in `/python`.
 
