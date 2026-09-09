@@ -1,0 +1,51 @@
+{
+  "name": "curation-lunar",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.11.1"
+  },
+  "scripts": {
+    "dev": "node --watch-path=src/server --watch-path=src/data --watch-path=src/types src/server/server.ts",
+    "data:prepare": "node scripts/prepare-data.ts",
+    "build": "npm run typecheck && vite build",
+    "start": "node src/server/server.ts --production",
+    "preview": "npm run start",
+    "docker:build": "docker compose -f dockercompose.yml build",
+    "docker:up": "docker compose -f dockercompose.yml up --build --detach --wait",
+    "docker:down": "docker compose -f dockercompose.yml down",
+    "docker:logs": "docker compose -f dockercompose.yml logs --follow web",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src scripts/prepare-data.ts tests vite.config.ts vitest.config.ts",
+    "format": "prettier --write src tests scripts/prepare-data.ts *.json *.ts",
+    "format:check": "prettier --check src tests scripts/prepare-data.ts *.json *.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run test"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-router-dom": "7.18.3",
+    "express": "^5.1.0",
+    "cheerio": "^1.1.2",
+    "sanitize-html": "^2.17.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/sanitize-html": "^2.16.0",
+    "@types/node": "24.11.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "@vitejs/plugin-react": "6.1.1",
+    "eslint": "10.10.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "prettier": "3.9.6",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.69.0",
+    "vite": "8.2.2",
+    "vitest": "4.1.11"
+  }
+}

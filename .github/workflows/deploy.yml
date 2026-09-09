@@ -1,4 +1,4 @@
-name: Check and deploy Lunar Curation
+name: Check Lunar Curation
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
         run: uv run --project python --locked --extra test pytest python/tests -q
 
   frontend:
-    name: Frontend checks and deployment
+    name: Frontend checks and build
     needs: python
     runs-on: ubuntu-latest
     steps:
@@ -69,24 +69,10 @@ jobs:
         if: steps.frontend.outputs.enabled == 'true'
         run: npm run build
 
-      - name: Verify deployable static output
+      - name: Verify frontend build output
         if: steps.frontend.outputs.enabled == 'true'
         shell: bash
         run: test -f .local/dist/index.html
 
-      - name: Deploy curation.apolloinrealtime.org
-        if: github.ref == 'refs/heads/main' && steps.frontend.outputs.enabled == 'true'
-        env:
-          DREAMHOST_PRIVATE_KEY: ${{ secrets.DREAMHOST_PRIVATE_KEY }}
-          DREAMHOST_HOST: ${{ vars.DREAMHOST_HOST }}
-          DREAMHOST_PATH_DEV: ${{ vars.DREAMHOST_PATH_DEV }}
-          DREAMHOST_USER: ${{ vars.DREAMHOST_USER }}
-        shell: bash
-        run: |
-          install -d -m 700 ~/.ssh
-          printf '%s\n' "$DREAMHOST_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "$DREAMHOST_HOST" >> ~/.ssh/known_hosts
-
-          ssh "$DREAMHOST_USER@$DREAMHOST_HOST" "mkdir -p '$DREAMHOST_PATH_DEV'"
-          rsync -avz --delete .local/dist/ "$DREAMHOST_USER@$DREAMHOST_HOST:$DREAMHOST_PATH_DEV/"
+      # Hosting is deferred. Publishing the frontend alone would omit the
+      # read-only Node service and the reviewed SQLite snapshot.

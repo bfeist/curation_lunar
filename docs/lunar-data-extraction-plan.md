@@ -1,6 +1,6 @@
 # NASA Lunar Curation: reverse engineering of the current public website
 
-Status: Python acquisition implementation and live pilot completed; the full harvest and website parity review remain outstanding. See `/python/README.md` for executable commands and generated run reports for actual coverage. The React application has not been built.
+Status: Python acquisition implementation and live pilot completed; full acquisition `full-2026-09-08` started September 8, 2026 and is running at the documented handoff. See [full scan status and next steps](full-scan-and-next-steps.md) for monitoring and the ordered follow-up work. Full acquisition acceptance and website parity review remain outstanding. See `/python/README.md` for executable commands and generated run reports for actual coverage. The React application has not been built.
 
 Inspected: September 8, 2026.
 
@@ -383,4 +383,4 @@ Build a stable view model independent of NASA's current API field casing and the
 
 When the original database becomes available, audit it alongside the original code and implement a separate importer. Revise this public-view model through new migrations where the source reveals different entity boundaries or relationships; do not force historical data into an incorrect initial schema. Preserve public-source provenance, external-identifier mappings and stable frontend contracts so we can explain differences and migrate deliberately. See [schema-evolution.md](schema-evolution.md).
 
-**Next implementation task:** inventory the current website's pages, content sections and user journeys in the content-parity matrix, then build a Python pilot that acquires representative examples of each content type. Expand acquisition until that inventory can be faithfully presented by the new React site.
+**Next implementation task:** finish the running full acquisition, resolve extraction failures and discovery gaps, and review the resulting content inventory before freezing the frontend data and route contracts. Follow the [ordered next steps](full-scan-and-next-steps.md); the pilot implementation is already complete.

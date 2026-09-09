@@ -34,6 +34,8 @@ uv run --project python --locked lunar-ingest resume data/runs/full-example --ma
 
 Full mode removes pilot entity/page limits. It enumerates missions, lookup/filter endpoints, website sample searches, mission-wide and unfiltered photo searches, and the independent bibliography search; follows discovered sample/photo details, bibliography association popups and linked lunar HTML pages; and preserves editorial text, tables, forms, references, galleries and asset placements.
 
+The full baseline `full-2026-09-08` was launched on September 8, 2026. See [scan status and next steps](../docs/full-scan-and-next-steps.md) for its background logs, monitoring and review checklist. For a new long run on Windows, `powershell -NoProfile -File scripts/run-full-scan.ps1 -RunName <new-run>` runs full mode without a request cap, then validates and exports when acquisition stops. Add `-Resume` for an existing full run after its previous writer has exited. The supervisor records protective pauses as needing attention, not completion.
+
 `--max-requests` is a per-invocation HTTP budget, including retries and redirects. Hitting it pauses a persisted queue. Use `--max-requests 0` for an unbounded invocation only when intending a long run. `Ctrl+C` preserves completed requests. Resume does not fetch successful cached responses again.
 
 The baseline intentionally requests related API endpoints even when summary flags are null/false. All records discovered through any source remain in the dataset. Unknown fields are retained and flagged; missing/error pages are not treated as empty successful results.

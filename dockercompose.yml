@@ -1,0 +1,22 @@
+name: curation-lunar
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/apiv1/Dockerfile
+      target: runtime
+    image: curation-lunar:local
+    ports:
+      - "3005:3005"
+    volumes:
+      - type: bind
+        source: ./.local/data
+        target: /app/.local/data
+        read_only: true
+        bind:
+          create_host_path: false
+    read_only: true
+    tmpfs:
+      - /tmp
+    init: true
+    restart: unless-stopped
