@@ -78,7 +78,7 @@ function Home() {
       <section className="n-hero">
         <img
           className="n-hero-photo"
-          src="https://live.staticflickr.com/7320/9672172187_20cae06251_o.jpg"
+          src="/images/lunar-panorama.jpg"
           alt="An astronaut among rocks on the lunar surface, with mountains across the horizon"
           width="9000"
           height="1066"
