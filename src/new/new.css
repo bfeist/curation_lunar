@@ -464,6 +464,7 @@
   width: 100%;
   aspect-ratio: 1.4;
   object-fit: cover;
+  object-position: 50% 70%;
 }
 .new-site .n-feature-image > span {
   display: block;

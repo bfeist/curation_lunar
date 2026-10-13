@@ -159,8 +159,7 @@ function Home() {
         <div className="n-wrap n-feature-grid">
           <div className="n-feature-image">
             <img
-              src="https://curator.jsc.nasa.gov/lunar/_images/64435.jpg"
-              alt="Lunar sample 64435"
+              src="https://curator.jsc.nasa.gov/lunar/samplecatalog/photos/jpeg/S72-39674.jpg"              alt="Lunar sample 64435"
               loading="lazy"
             />
             <span>From the collection / Sample 64435</span>
